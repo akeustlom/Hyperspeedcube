@@ -7,13 +7,13 @@ function def_simplex(letter, depths)
 
   puzzles:add{
     id = '4_simplex_' .. string.lower(letter),
-    name = "4-Simplex " .. letter,
     version = '0.1.0',
+    name = "4-Simplex " .. letter,
     ndim = 4,
     colors = '4_simplex',
     build = function(self)
       local sym = cd'a4'
-      local shape = lib.symmetries['4_simplex'].simplex_4d()
+      local shape = lib.symmetries.a4.simplex_4d()
       self:carve(shape:iter_poles())
 
       local ooox = sym.ooox.unit
@@ -50,6 +50,8 @@ function def_simplex(letter, depths)
         })
       end
     end,
+
+    tags = { 'experimental' },
   }
 end
 

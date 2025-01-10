@@ -23,7 +23,7 @@ end
 function cut_ft_shape(puzzle, shape, cut_depths, ...)
   local poles = shape:iter_poles(...)
   local colors = puzzle:carve(poles)
-  local axes = cut_depths and puzzle.axes:add(poles, cut_depths)
+  local axes = puzzle.axes:add(poles, cut_depths)
   return colors, axes
 end
 
@@ -69,6 +69,35 @@ function layers.even_odd(start, stop, layer_count)
   end
 
   return layers.inclusive(start, stop, floor(layer_count/2))
+end
+
+-- Returns evenly-spaced layer depths, including both endpoints and with `INF`
+-- and `-INF` on either side.
+function layers.inclusive_inf(start, stop, layer_count)
+  if layer_count < 1 then
+    return nil
+  elseif layer_count == 1 then
+    return {INF, -INF}
+  elseif layer_count == 2 then
+    return {INF, (start+stop)/2, -INF}
+  else
+    return concatseq({INF}, layers.inclusive(start, stop, layer_count-2), {-INF})
+  end
+end
+
+-- Returns evenly-spaced layer depths, excluding both endpoints and with `INF`
+-- on one side.
+function layers.exclusive_centered(center, half_range, cut_count)
+  if cut_count == 0 then
+    return {}
+  elseif cut_count == 1 then
+    return {center}
+  else
+    local half_layer_height = half_range / (cut_count + 1)
+    local outermost_cut = center + half_range - half_layer_height
+    local innermost_cut = center - half_range + half_layer_height
+    return layers.inclusive(outermost_cut, innermost_cut, cut_count-1)
+  end
 end
 
 function unpack_named(env, elements)

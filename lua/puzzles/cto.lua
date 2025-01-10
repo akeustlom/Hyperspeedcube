@@ -12,7 +12,7 @@ puzzles:add{
   colors = 'octahedron',
   build = function(self)
     local sym = cd'bc3'
-    local shape = lib.symmetries.octahedral.octahedron()
+    local shape = lib.symmetries.bc3.octahedron()
     self:carve(shape:iter_poles())
 
     -- Define axes and slices
@@ -23,4 +23,9 @@ puzzles:add{
       self.twists:add(axis, twist_transform, {gizmo_pole_distance = sqrt(3)/3})
     end
   end,
+
+  tags = {
+    author = "Andrew Farkas",
+    experimental = true,
+  }
 }

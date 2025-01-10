@@ -12,7 +12,7 @@ function build_48_cell_puzzle(self, shape_name)
 
 
   if shape_name == 'hypercube' then
-    self:carve(cubic_sym:orbit(sym.ooox.unit):named(lib.symmetries.hypercubic.HYPERCUBE_FACET_NAMES))
+    self:carve(cubic_sym:orbit(sym.ooox.unit):named(lib.symmetries.bc4.HYPERCUBE_FACET_NAMES))
   elseif shape_name == 'orthoplex' then
     self:carve(cubic_sym:orbit(sym:thru(4):transform(sym.ooox.unit)))
   elseif shape_name == 'octaplex' then
@@ -67,6 +67,7 @@ puzzles:add{
   name = "Half-Cut 48-Cell (Hypercube)",
   tags = {
     author = {"Andrew Farkas", "Luna Harran", "Milo Jacquet"},
+    experimental = true,
   },
   colors = 'hypercube',
   ndim = 4,
@@ -79,6 +80,7 @@ puzzles:add{
   name = "Half-Cut 48-Cell (16-Cell)",
   tags = {
     author = {"Andrew Farkas", "Luna Harran", "Milo Jacquet"},
+    experimental = true,
   },
   ndim = 4,
   build = function(self) build_48_cell_puzzle(self, 'orthoplex') end,
@@ -90,6 +92,7 @@ puzzles:add{
   name = "Half-Cut 48-Cell (24-Cell)",
   tags = {
     author = {"Andrew Farkas", "Luna Harran", "Milo Jacquet"},
+    experimental = true,
   },
   ndim = 4,
   build = function(self) build_48_cell_puzzle(self, 'octaplex') end,
@@ -101,6 +104,7 @@ puzzles:add{
   name = "Half-Cut 48-Cell",
   tags = {
     author = {"Andrew Farkas", "Luna Harran", "Milo Jacquet"},
+    experimental = true,
   },
   ndim = 4,
   build = function(self) build_48_cell_puzzle(self, '48cell') end,

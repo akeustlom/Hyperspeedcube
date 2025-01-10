@@ -5,10 +5,9 @@ puzzles:add{
   version = '0.1.0',
   ndim = 3,
   colors = 'octahedron',
-  -- TODO: tags. museum=1848
   build = function(self)
     local sym = cd'bc3'
-    local shape = lib.symmetries.octahedral.octahedron()
+    local shape = lib.symmetries.bc3.octahedron()
     self:carve(shape:iter_poles())
 
     -- Define axes and slices
@@ -23,4 +22,10 @@ puzzles:add{
       self.twists:add(axis, twist_transform, {gizmo_pole_distance = 2/sqrt(3)})
     end
   end,
+
+  -- TODO: tags. museum=1848
+  tags = {
+    author = "Andrew Farkas",
+    experimental = true,
+  }
 }

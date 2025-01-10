@@ -1,11 +1,10 @@
 local utils = lib.utils
 
 local REALISITIC_PROPORTIONS = true
-local CORNER_STALK_SIZE = 0.1
+CORNER_STALK_SIZE = 0.1
 
 local function ft_cube_cut_depths(ndim, layers)
   if layers < 2 then return end
-  if layers == 2 then return {1, 0, -1} end
 
   local outermost_cut
   local aesthetic_limit = 1 - 2/layers
@@ -14,7 +13,7 @@ local function ft_cube_cut_depths(ndim, layers)
     mechanical_limit = 1 / sqrt(ndim-1)
   end
   outermost_cut = min(aesthetic_limit, mechanical_limit - CORNER_STALK_SIZE)
-  return utils.concatseq({1}, utils.layers.inclusive(outermost_cut, -outermost_cut, layers-2), {-1})
+  return utils.layers.inclusive_inf(outermost_cut, -outermost_cut, layers)
 end
 
 GIZMO_EDGE_FACTOR = 0.8
@@ -24,18 +23,20 @@ puzzle_generators:add{
   id = 'ft_cube',
   version = '1.0.0',
   name = "NxNxN Face-Turning Cube",
+  aliases = {"N^3"},
   colors = 'cube',
   params = {
-    { name = "Layers", type = 'int', default = 3, min = 1, max = 17 },
+    { name = "Layers", type = 'int', default = 3, min = 1, max = 49 },
   },
   gen = function(params)
     local size = params[1]
+    if size == 1 then return 'cube' end
     return {
       name = size .. "x" .. size .. "x" .. size,
       aliases = { size .. "^" .. 3 },
       ndim = 3,
       build = function(self)
-        local shape = lib.symmetries.cubic.cube()
+        local shape = lib.symmetries.bc3.cube()
         local cut_depths = ft_cube_cut_depths(3, size)
         local colors, axes = utils.cut_ft_shape(self, shape, cut_depths)
 
@@ -55,28 +56,19 @@ puzzle_generators:add{
       end,
 
       tags = {
-        ['type/shape'] = size == 1,
-        ['type/puzzle'] = size ~= 1,
-        algebraic = {
-          abelian = size == 1,
-          trivial = size == 1,
-        },
-        canonical = size == 3,
+        'type/puzzle',
         completeness = {
-          complex = size == 1,
           laminated = size <= 2,
           real = size <= 3,
           super = size <= 2,
         },
         ['cuts/depth/deep/to_adjacent'] = size % 2 == 0,
         ['cuts/depth/half'] = size % 2 == 0,
-        meme = size == 1,
       },
     }
   end,
 
   examples = {
-    { params = {1}, tags = { 'algebraic/trivial', 'meme' } },
     {
       params = {2},
       aliases = { "Pocket Cube" },
@@ -89,6 +81,7 @@ puzzle_generators:add{
       params = {3},
       aliases = { "Rubik's Cube" },
       tags = {
+        'canonical',
         external = { gelatinbrain = '3.1.2', museum = 7629, wca = '333' },
         inventor = "Ernő Rubik",
       },
@@ -135,13 +128,15 @@ puzzle_generators:add{
     'shape/3d/platonic/cube',
     algebraic = {
       'doctrinaire', 'pseudo/doctrinaire',
-      '!fused', '!orientations/non_abelian', '!trivial', '!weird_orbits',
+      '!abelian', '!fused', '!orientations/non_abelian', '!trivial', '!weird_orbits',
     },
     axes = { '3d/elementary/cubic', '!hybrid', '!multicore' },
     colors = { '!multi_facet_per', '!multi_per_facet' },
+    completeness = { '!complex' },
     cuts = { depth = { 'shallow' }, '!stored', '!wedge' },
     turns_by = { 'face', 'facet' },
     '!experimental',
+    '!canonical',
     '!family',
     '!variant',
     '!meme',
@@ -154,20 +149,21 @@ puzzle_generators:add{
   id = 'ft_hypercube',
   version = '1.0.0',
   name = "NxNxNxN Face-Turning Hypercube",
+  aliases = {"N^4"},
   colors = 'hypercube',
   params = {
     { name = "Layers", type = 'int', default = 3, min = 1, max = 13 },
   },
   gen = function(params)
     local size = params[1]
-
+    if size == 1 then return 'hypercube' end
     return {
       name = size .. "x" .. size .. "x" .. size .. "x" .. size,
       aliases = { size .. "^" .. 4 },
       ndim = 4,
       build = function(self)
         local sym = cd'bc4'
-        local shape = lib.symmetries.hypercubic.hypercube()
+        local shape = lib.symmetries.bc4.hypercube()
         self:carve(shape:iter_poles())
 
         if size == 1 then
@@ -215,30 +211,21 @@ puzzle_generators:add{
       end,
 
       tags = {
-        ['type/shape'] = size == 1,
-        ['type/puzzle'] = size ~= 1,
-        algebraic = {
-          abelian = size == 1,
-          trivial = size == 1,
-        },
-        canonical = size == 3,
+        'type/puzzle',
         completeness = {
-          complex = size == 1,
           laminated = size <= 2,
           real = size <= 3,
           super = size <= 2,
         },
         ['cuts/depth/deep/to_adjacent'] = size % 2 == 0,
         ['cuts/depth/half'] = size % 2 == 0,
-        meme = size == 1,
       },
     }
   end,
 
   examples = {
-    { params = {1} },
     { params = {2}, tags = { external = { gelatinbrain = '8.1.1' } } },
-    { params = {3} },
+    { params = {3}, tags = { 'canonical' } },
     { params = {4} },
     { params = {5} },
     { params = {6} },
@@ -255,10 +242,11 @@ puzzle_generators:add{
     'shape/4d/platonic/hypercube',
     algebraic = {
       'doctrinaire', 'pseudo/doctrinaire',
-      '!fused', 'orientations/non_abelian', '!trivial', '!weird_orbits',
+      '!abelian', '!fused', 'orientations/non_abelian', '!trivial', '!weird_orbits',
     },
     axes = { '4d/elementary/hypercubic', '!hybrid', '!multicore' },
     colors = { '!multi_facet_per', '!multi_per_facet' },
+    completeness = { '!complex' },
     cuts = { depth = { 'shallow' }, '!stored', '!wedge' },
     turns_by = { 'cell', 'facet' },
     '!experimental',
@@ -339,6 +327,7 @@ puzzle_generators:add{
     cuts = { depth = { 'shallow' }, '!stored', '!wedge' },
     turns_by = { 'facet' },
     'experimental',
+    '!canonical',
     '!family',
     '!variant',
     '!meme',

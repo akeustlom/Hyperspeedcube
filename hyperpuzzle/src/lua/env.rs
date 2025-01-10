@@ -86,11 +86,11 @@ pub(super) fn init_lua_environment(lua: &Lua, env: &LuaTable, loader: LuaLoader)
     env.raw_set("symmetry", lua.create_function(symmetry_fn)?)?;
 
     // `transform` constructors
-    let ident_fn = LuaTransform::construct_identity;
+    let ident_fn = LuaTransform::construct_identity_lua;
     env.raw_set("ident", lua.create_function(ident_fn)?)?;
-    let refl_fn = LuaTransform::construct_reflection;
+    let refl_fn = LuaTransform::construct_reflection_lua;
     env.raw_set("refl", lua.create_function(refl_fn)?)?;
-    let rot_fn = LuaTransform::construct_rotation;
+    let rot_fn = LuaTransform::construct_rotation_lua;
     env.raw_set("rot", lua.create_function(rot_fn)?)?;
 
     // `region` constants
@@ -123,6 +123,19 @@ pub(super) fn init_lua_environment(lua: &Lua, env: &LuaTable, loader: LuaLoader)
     ])?;
     seal_table(lua, &names_table)?;
     env.raw_set("names", names_table)?;
+
+    // Tag utilities
+    env.raw_set(
+        "merge_tags",
+        lua.create_function(|lua, tables: LuaMultiValue| {
+            tables
+                .into_iter()
+                .map(|t| super::tags::unpack_tags_table(lua, <Option<LuaTable>>::from_lua(t, lua)?))
+                .reduce(|a, b| Ok(crate::lua::tags::merge_tag_sets(a?, b?)))
+                .unwrap_or(Ok(crate::TagSet::new()))
+                .map(|tag_set| super::tags::tags_table_to_lua(lua, &tag_set))
+        })?,
+    )?;
 
     Ok(())
 }

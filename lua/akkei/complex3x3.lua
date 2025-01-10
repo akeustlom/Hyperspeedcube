@@ -1,13 +1,13 @@
 puzzles:add{
   id = 'complex_3x3x3',
   name = "Complex 3x3x3",
-  version = '0.1.0',
+  version = '1.0.0',
   ndim = 3,
   colors = 'cube',
   remove_internals = false,
   build = function(self)
     local sym = cd'bc3'
-    local shape = lib.symmetries.cubic.cube()
+    local shape = lib.symmetries.bc3.cube()
     self:carve(shape:iter_poles())
 
     -- Define axes and slices
@@ -18,7 +18,18 @@ puzzles:add{
       self.twists:add(axis, twist_transform, {gizmo_pole_distance = 1})
     end
 
-    lib.utils.unpack_named(_ENV, self.axes) --Give axes labels for filters, twists, and to simplify following step
+    --Give axes labels for filters, twists, and to simplify following step
+    lib.utils.unpack_named(_ENV, self.axes)
+
+    -- Add super-stickers on internal faces
+    for i=3,-3,-2 do
+        self:slice(plane(vec('x'), i/5), {stickers=self.colors.R})
+        self:slice(plane(vec('x')*-1, i/5), {stickers=self.colors.L})
+        self:slice(plane(vec('y'), i/5), {stickers=self.colors.U})
+        self:slice(plane(vec('y')*-1, i/5), {stickers=self.colors.D})
+        self:slice(plane(vec('z'), i/5), {stickers=self.colors.F})
+        self:slice(plane(vec('z')*-1, i/5), {stickers=self.colors.B})
+    end
 
     -- Mark one copy of each piece-type
     self:mark_piece(~R(1) & ~L(1) & ~U(1) & ~D(1) & ~F(1) & ~B(1), 'core', "Core")
@@ -32,22 +43,14 @@ puzzles:add{
     self:mark_piece(R(1) & L(1) & U(1) & ~D(1) & F(1) & B(1), 'anticenter', "Anti-Center")
     self:mark_piece(R(1) & L(1) & U(1) & D(1) & F(1) & B(1), 'anticore', "Anti-Core")
 
-    self:unify_piece_types(sym) -- Pattern piece-types around the puzzle
+    -- Pattern piece-types around the puzzle
+    self:unify_piece_types(sym)
 
-    -- Add super-stickers on internal faces
-    for i=3,-3,-2 do
-        self:slice(plane(vec('x'), i/5), {stickers=self.colors.R})
-        self:slice(plane(vec('x')*-1, i/5), {stickers=self.colors.L})
-        self:slice(plane(vec('y'), i/5), {stickers=self.colors.U})
-        self:slice(plane(vec('y')*-1, i/5), {stickers=self.colors.D})
-        self:slice(plane(vec('z'), i/5), {stickers=self.colors.F})
-        self:slice(plane(vec('z')*-1, i/5), {stickers=self.colors.B})
-    end
   end,
 
   tags = {
     builtin = false,
-    external = { '!gelatinbrain', '!hof', '!mc4d', '!museum', '!wca' },
+    external = { '!gelatinbrain', '!hof', '!mc4d', museum = 6777, '!wca' },
 
     author = "Jason White",
     '!inventor',
@@ -59,7 +62,7 @@ puzzles:add{
       '!abelian', '!fused', '!orientations/non_abelian', '!trivial', '!weird_orbits',
     },
     axes = { '3d/elementary/cubic', '!hybrid', '!multicore' },
-    colors = { '!multi_per_facet', '!multi_facet_per' },
+    colors = { '!multi_per_facet', 'multi_facet_per' },
     completeness = { 'super', '!real', '!laminated', 'complex' },
     cuts = { '!depth', '!stored', '!wedge' },
     turns_by = {'face', 'facet'},
