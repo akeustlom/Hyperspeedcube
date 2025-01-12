@@ -78,7 +78,7 @@ puzzles:add{
 puzzles:add{
   id = 'complex_tetrahedron',
   name = "Complex Tetrahedron",
-  version = '1.0.0',
+  version = '1.0.1',
   ndim = 3,
   colors = 'tetrahedron',
   remove_internals = false,
@@ -122,11 +122,11 @@ puzzles:add{
     self:slice(plane(L_v, -2-d), {stickers = self.colors.L})
 
     -- Mark one copy of each piece-type
-    self:mark_piece(~R(1) & ~L(1) & ~U(1) & ~F(1), 'core', "0g / Core")
-    self:mark_piece(R(1) & ~L(1) & ~U(1) & ~F(1), 'center', "1g / Center")
-    self:mark_piece(R(1) & L(1) & ~U(1) & ~F(1), 'edge', "2g / Edge")
-    self:mark_piece(R(1) & L(1) & U(1) & ~F(1), 'corner', "3g / Corner")
-    self:mark_piece(R(1) & L(1) & U(1) & F(1), 'anticore', "4g / Anticore")
+    self:mark_piece(~R(1) & ~L(1) & ~U(1) & ~F(1), 'core', "Core")
+    self:mark_piece(R(1) & ~L(1) & ~U(1) & ~F(1), 'center', "Center")
+    self:mark_piece(R(1) & L(1) & ~U(1) & ~F(1), 'edge', "Edge")
+    self:mark_piece(R(1) & L(1) & U(1) & ~F(1), 'corner', "Corner")
+    self:mark_piece(R(1) & L(1) & U(1) & F(1), 'anticore', "Anticore")
 
     -- Pattern piece-types around the puzzle
     self:unify_piece_types(sym)
@@ -163,7 +163,7 @@ puzzles:add{
 puzzles:add{
   id = 'complex_triprism',
   name = "Complex Triangular Prism",
-  version = '0.1.0',
+  version = '0.2.0',
   ndim = 3,
   remove_internals = false,
   build = function(self)
@@ -179,6 +179,9 @@ puzzles:add{
     self.axes:add(sym:orbit(top), {height*3/5, -height*1/5})
     self.axes:add(sym:orbit(side), {1/4, -5/4})
     self.axes:add(sym:orbit(-side), {5/4, -1/4})
+
+    self.axes:rename({'U', 'D', 'R', 'L', 'F', 'r', 'l', 'f'})
+	lib.utils.unpack_named(_ENV, self.axes)
 
     -- Define twists
     for _, axis, twist_transform in sym.chiral:orbit(self.axes[top], sym:thru(2, 1)) do
@@ -207,7 +210,7 @@ puzzles:add{
     local v3 = sym:thru(2):transform(v2)
     self:slice(plane(v3, 1/4), {stickers = self.colors[5]})
     self:slice(plane(v3, -5/4), {stickers = self.colors[5]})
-    -- non-face-aligned stickers, to make the puzzle super
+    -- non-face-aligned stickers, to make the puzzle super; extra colors to cooperate with solve detection, since faces are pointing opposite, option in future?
     for i = 1, 3, 1 do
     self.colors:add()
     end
@@ -219,22 +222,24 @@ puzzles:add{
     self:slice(plane(-v3, 5/4), {stickers = self.colors[8]})
 
     self.colors:set_defaults({"White", "Yellow", "Red", "Blue Triad[2]", "Green", "Red Tetrad [3]", "Blue Tetrad [3]", "Green Tetrad [3]"})
+    self.colors:rename({"Up", "Down", "Right", "Left", "Front", "InnerRight", "InnerLeft", "InnerFront"})
 
     -- Mark one copy of each piece-type
-    local axs = self.axes
-    self:mark_piece(~axs[1](1) & ~axs[2](1) & ~axs[3](1) & ~axs[4](1) & ~axs[5](1), 'core', "Core")
-    self:mark_piece(axs[1](1) & ~axs[2](1) & ~axs[3](1) & ~axs[4](1) & ~axs[5](1), 'centers/top_center', "Top Center")
-    self:mark_piece(~axs[1](1) & ~axs[2](1) & axs[3](1) & ~axs[4](1) & ~axs[5](1), 'centers/side_center', "Side Center")
-    self:mark_piece(axs[1](1) & ~axs[2](1) & axs[3](1) & ~axs[4](1) & ~axs[5](1), 'edges/top_edge', "Top Edge")
-    self:mark_piece(~axs[1](1) & ~axs[2](1) & axs[3](1) & axs[4](1) & ~axs[5](1), 'edges/mid_edge', "Side Edge")
-    self:mark_piece(axs[1](1) & ~axs[2](1) & axs[3](1) & axs[4](1) & ~axs[5](1), 'corner', "Corner")
-    self:mark_piece(axs[1](1) & axs[2](1) & ~axs[3](1) & ~axs[4](1) & ~axs[5](1), 'axle', "Axle")
-    self:mark_piece(axs[1](1) & axs[2](1) & axs[3](1) & ~axs[4](1) & ~axs[5](1), 'triwall', "Triwall")
-    self:mark_piece(~axs[1](1) & ~axs[2](1) & axs[3](1) & axs[4](1) & axs[5](1), 'ring', "Ring")
-    self:mark_piece(~axs[1](1) & ~axs[2](1) & axs[3](1) & axs[4](1) & axs[5](1), 'ring', "Ring")
-    self:mark_piece(axs[1](1) & ~axs[2](1) & axs[3](1) & axs[4](1) & axs[5](1), 'anticenters/top', "Top Anti-center")
-    self:mark_piece(axs[1](1) & axs[2](1) & axs[3](1) & axs[4](1) & ~axs[5](1), 'anticenters/side', "Side Anti-center")
-    self:mark_piece(axs[1](1) & axs[2](1) & axs[3](1) & axs[4](1) & axs[5](1), 'anticore', "Anti-core")
+    self:mark_piece(~F(1) & ~R(1) & ~L(1) & ~U(1) & ~D(1), 'core', "Core")
+    self:add_piece_type('center', "Center")
+    self:mark_piece(~F(1) & ~R(1) & ~L(1) & U(1) & ~D(1), 'center/top_center', "Top Center")
+    self:mark_piece(F(1) & ~R(1) & ~L(1) & ~U(1) & ~D(1), 'center/side_center', "Side Center")
+    self:add_piece_type('edge', "Edge")
+    self:mark_piece(F(1) & ~R(1) & ~L(1) & U(1) & ~D(1), 'edge/top_edge', "Top Edge")
+    self:mark_piece(F(1) & R(1) & ~L(1) & ~U(1) & ~D(1), 'edge/side_edge', "Side Edge")
+    self:mark_piece(~F(1) & ~R(1) & ~L(1) & U(1) & D(1), 'axle', "Axle")
+    self:mark_piece(F(1) & R(1) & ~L(1) & U(1) & ~D(1), 'corner', "Corner")
+    self:mark_piece(F(1) & ~R(1) & ~L(1) & U(1) & D(1), 'triwall', "Triwall")
+    self:mark_piece(F(1) & R(1) & L(1) & ~U(1) & ~D(1), 'ring', "Ring")
+    self:add_piece_type('anticenter', "Anti-Center")
+    self:mark_piece(F(1) & R(1) & L(1) & ~U(1) & D(1), 'anticenter/top_anticenter', "Top Anti-center")
+    self:mark_piece(~F(1) & R(1) & L(1) & U(1) & D(1), 'anticenter/side_anticenter', "Side Anti-center")
+    self:mark_piece(F(1) & R(1) & L(1) & U(1) & D(1), 'anticore', "Anti-core")
 
     -- Pattern piece-types around the puzzle
     self:unify_piece_types(sym)
@@ -253,7 +258,7 @@ puzzles:add{
       'doctrinaire', 'pseudo/doctrinaire',
       '!abelian', '!fused', '!orientations/non_abelian', '!trivial', '!weird_orbits',
     },
-    axes = { nil, '!hybrid', '!multicore' },
+    axes = { '3d/prismatic', '!hybrid', '!multicore' },
     colors = { '!multi_per_facet', '!multi_facet_per' },
     completeness = { 'super', '!real', '!laminated', 'complex' },
     cuts = { '!depth', '!stored', '!wedge' },

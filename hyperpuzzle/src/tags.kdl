@@ -28,6 +28,7 @@ shape expected=true inline=true {
     compound "Compound" {
       _5tetrahedra "5 tetrahedra"
     }
+    bipyramid "Bipyramid"
     prism "Prism"
     other "Other"
   }
@@ -108,6 +109,7 @@ axes "Axis system" expected=true {
     compound "Compound" {
       _5tetrahedra "5 tetrahedra"
     }
+    prismatic "Prismatic"
   }
   _4d "4D" {
     elementary "Elementary" {
