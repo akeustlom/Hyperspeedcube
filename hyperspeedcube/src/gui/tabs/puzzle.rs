@@ -6,7 +6,7 @@ use egui::Widget;
 use eyre::{bail, OptionExt, Result};
 use hyperdraw::*;
 use hypermath::prelude::*;
-use hyperprefs::{AnimationPreferences, Preferences, PuzzleViewPreferencesSet};
+use hyperprefs::{AnimationPreferences, Preferences, PuzzleViewPreferencesSet, StyleColorMode};
 use hyperpuzzle::{
     GizmoFace, LayerMask, Puzzle, PuzzleBuildStatus, PuzzleResult, ScrambleProgress,
 };
@@ -402,7 +402,7 @@ impl PuzzleWidget {
                 // Adjust camera zoom using scroll wheel.
                 let cam = &mut view.camera;
                 cam.zoom *= (scroll_delta.y / 500.0).exp2();
-                cam.zoom = cam.zoom.clamp(2.0_f32.powf(-6.0), 2.0_f32.powf(8.0));
+                cam.zoom = cam.zoom.clamp(2.0_f32.powi(-6), 2.0_f32.powi(8));
             }
         }
 
@@ -545,6 +545,10 @@ impl PuzzleWidget {
                     transform.euclidean_rotation_matrix().at_ndim(puzzle.ndim())
                 }),
         };
+
+        if draw_params.any_animated() {
+            ui.ctx().request_repaint();
+        }
 
         // Draw puzzle.
         let painter = ui.painter_at(r.rect);
