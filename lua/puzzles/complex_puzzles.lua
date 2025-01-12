@@ -1,3 +1,8 @@
+local utils = lib.utils
+local linear = lib.symmetries.linear
+local polygonal = lib.symmetries.polygonal
+local prisms = lib.puzzles.prisms -- Helpers to integrate triangular prism; should i pull from puzzles?
+
 puzzles:add{
   id = 'complex_3x3x3',
   name = "Complex 3x3x3",
@@ -19,7 +24,7 @@ puzzles:add{
     end
 
     --Give axes labels for filters, twists, and to simplify piece filters
-    lib.utils.unpack_named(_ENV, self.axes)
+    utils.unpack_named(_ENV, self.axes)
 
     -- Add super-stickers on internal faces
     for i=3,-3,-2 do
@@ -103,7 +108,7 @@ puzzles:add{
     end
 
     --Give axes labels for filters, twists, and to simplify piece filters
-    lib.utils.unpack_named(_ENV, self.axes)
+    utils.unpack_named(_ENV, self.axes)
 
     -- Add super-stickers on internal faces
     -- get vectors that point to faces, then slice along cutplanes
@@ -163,85 +168,72 @@ puzzles:add{
 puzzles:add{
   id = 'complex_triprism',
   name = "Complex Triangular Prism",
-  version = '0.2.0',
+  version = '1.0.0',
   ndim = 3,
   remove_internals = false,
   build = function(self)
-    local height = 1.6 -- height modifier (aesthetic)
-    local sym = cd{3,2}
-    local side = sym.xoo.unit
-    local top = sym.oox.unit
+    local triangle = polygonal.ngon(3,1)
+    local side_cut_depths = {1/4, -5/4}
+    local height = triangle.edge_length/2
+    local line = linear.line(height, 'z', 'U', 'D')
+    local sym = cd{3, 2}
 
-    self:carve(sym:orbit(top*height))
-    self:carve(sym:orbit(side))
+    local line_cut_depths = {height*3/5, -height/5}
 
-    -- Define axes and slices
-    self.axes:add(sym:orbit(top), {height*3/5, -height*1/5})
-    self.axes:add(sym:orbit(side), {1/4, -5/4})
-    self.axes:add(sym:orbit(-side), {5/4, -1/4})
+    local base_colors, base_axes = utils.cut_ft_shape(self, line, line_cut_depths, 'U', 'D')
+    local side_colors, side_axes = utils.cut_ft_shape(self, triangle, side_cut_depths, 'F')
+    -- create additional colors for internal faces, using duoprism darks
+    for i=1,3,1 do self.colors:add("A"..utils.nth_uppercase_name(i)) end
 
-    self.axes:rename({'U', 'D', 'R', 'L', 'F', 'r', 'l', 'f'})
-	lib.utils.unpack_named(_ENV, self.axes)
+    self.colors:reorder(prisms.facet_order)
+    self.colors:set_defaults(prisms.get_default_color)
+    self.axes:reorder(prisms.facet_order)
 
-    -- Define twists
-    for _, axis, twist_transform in sym.chiral:orbit(self.axes[top], sym:thru(2, 1)) do
-      self.twists:add(axis, twist_transform, {gizmo_pole_distance = height})
-    end
-    for _, axis, twist_transform in sym.chiral:orbit(self.axes[side], sym:thru(2, 3)) do
-      self.twists:add(axis, twist_transform, {gizmo_pole_distance = 1})
-    end
-    for _, axis, twist_transform in sym.chiral:orbit(self.axes[-side], sym:thru(3, 2)) do
-      self.twists:add(axis, twist_transform, {gizmo_pole_distance = 1.25})
-    end
+    local U = base_axes[1]
+    local F1 = side_axes[1]
 
-    --Give axes labels for filters, twists, and to simplify piece filters
-
-    -- Add super-stickers on internal faces
-    for i = 3, -3, -2 do
-    self:slice(plane(top, i*height/5), {stickers = self.colors[1]})
-    self:slice(plane(-top, i*height/5), {stickers = self.colors[2]})
+    local function add_twist_set(axis, twist_transform, twist_data)
+        for t in sym:orbit(axis) do
+            self.twists:add(t:transform(axis), t:transform_oriented(twist_transform), twist_data)
+        end
     end
 
-    self:slice(plane(side, 1/4), {stickers = self.colors[3]})
-    self:slice(plane(side, -5/4), {stickers = self.colors[3]})
-    local v2 = sym:thru(1):transform(side)
-    self:slice(plane(v2, 1/4), {stickers = self.colors[4]})
-    self:slice(plane(v2, -5/4), {stickers = self.colors[4]})
-    local v3 = sym:thru(2):transform(v2)
-    self:slice(plane(v3, 1/4), {stickers = self.colors[5]})
-    self:slice(plane(v3, -5/4), {stickers = self.colors[5]})
-    -- non-face-aligned stickers, to make the puzzle super; extra colors to cooperate with solve detection, since faces are pointing opposite, option in future?
-    for i = 1, 3, 1 do
-    self.colors:add()
+    add_twist_set(U, sym:thru(2, 1), {gizmo_pole_distance = height})
+    add_twist_set(F1, sym:thru(3, 1), {gizmo_pole_distance = 1})
+
+    utils.unpack_named(_ENV, self.axes)
+    
+    -- internal stickers; let the record show that snek tried to compress the loops
+    for j=1,2,1 do
+        self:slice(plane(FA.vector, side_cut_depths[j]), {stickers = self.colors.FA}) -- doesn't seem to be another way to access the color (probably skill issue)
+        self:slice(plane(FB.vector, side_cut_depths[j]), {stickers = self.colors.FB})
+        self:slice(plane(FC.vector, side_cut_depths[j]), {stickers = self.colors.FC})
+        self:slice(plane(-FA.vector, -side_cut_depths[j]), {stickers = self.colors.AA})
+        self:slice(plane(-FB.vector, -side_cut_depths[j]), {stickers = self.colors.AB})
+        self:slice(plane(-FC.vector, -side_cut_depths[j]), {stickers = self.colors.AC})
     end
-    self:slice(plane(-side, -1/4), {stickers = self.colors[6]})
-    self:slice(plane(-side, 5/4), {stickers = self.colors[6]})
-    self:slice(plane(-v2, -1/4), {stickers = self.colors[7]})
-    self:slice(plane(-v2, 5/4), {stickers = self.colors[7]})
-    self:slice(plane(-v3, -1/4), {stickers = self.colors[8]})
-    self:slice(plane(-v3, 5/4), {stickers = self.colors[8]})
+    for k=3,-3,-2 do
+        self:slice(plane(U.vector, height*k/5), {stickers = self.colors.U})
+        self:slice(plane(D.vector, height*k/5), {stickers = self.colors.D})
+    end
 
-    self.colors:set_defaults({"White", "Yellow", "Red", "Blue Triad[2]", "Green", "Red Tetrad [3]", "Blue Tetrad [3]", "Green Tetrad [3]"})
-    self.colors:rename({"Up", "Down", "Right", "Left", "Front", "InnerRight", "InnerLeft", "InnerFront"})
-
-    -- Mark one copy of each piece-type
-    self:mark_piece(~F(1) & ~R(1) & ~L(1) & ~U(1) & ~D(1), 'core', "Core")
+    -- Mark piece-types
+    self:mark_piece(~U(1) & ~FA(1) & ~FB(1) & ~FC(1) & ~D(1), 'core', "Core")
     self:add_piece_type('center', "Center")
-    self:mark_piece(~F(1) & ~R(1) & ~L(1) & U(1) & ~D(1), 'center/top_center', "Top Center")
-    self:mark_piece(F(1) & ~R(1) & ~L(1) & ~U(1) & ~D(1), 'center/side_center', "Side Center")
+    self:mark_piece(U(1) & ~FA(1) & ~FB(1) & ~FC(1) & ~D(1), 'center/top_center', "Top Center")
+    self:mark_piece(~U(1) & FA(1) & ~FB(1) & ~FC(1) & ~D(1), 'center/side_center', "Side Center")
     self:add_piece_type('edge', "Edge")
-    self:mark_piece(F(1) & ~R(1) & ~L(1) & U(1) & ~D(1), 'edge/top_edge', "Top Edge")
-    self:mark_piece(F(1) & R(1) & ~L(1) & ~U(1) & ~D(1), 'edge/side_edge', "Side Edge")
-    self:mark_piece(~F(1) & ~R(1) & ~L(1) & U(1) & D(1), 'axle', "Axle")
-    self:mark_piece(F(1) & R(1) & ~L(1) & U(1) & ~D(1), 'corner', "Corner")
-    self:mark_piece(F(1) & ~R(1) & ~L(1) & U(1) & D(1), 'triwall', "Triwall")
-    self:mark_piece(F(1) & R(1) & L(1) & ~U(1) & ~D(1), 'ring', "Ring")
+    self:mark_piece(U(1) & FA(1) & ~FB(1) & ~FC(1) & ~D(1), 'edge/top_edge', "Top Edge")
+    self:mark_piece(~U(1) & FA(1) & FB(1) & ~FC(1) & ~D(1), 'edge/side_edge', "Side Edge")
+    self:mark_piece(U(1) & ~FA(1) & ~FB(1) & ~FC(1) & D(1), 'axle', "Axle")
+    self:mark_piece(U(1) & FA(1) & FB(1) & ~FC(1) & ~D(1), 'corner', "Corner")
+    self:mark_piece(U(1) & FA(1) & ~FB(1) & ~FC(1) & D(1), 'triwall', "Triwall")
+    self:mark_piece(~U(1) & FA(1) & FB(1) & FC(1) & ~D(1), 'antiaxle', "Anti-Axle")
     self:add_piece_type('anticenter', "Anti-Center")
-    self:mark_piece(F(1) & R(1) & L(1) & ~U(1) & D(1), 'anticenter/top_anticenter', "Top Anti-center")
-    self:mark_piece(~F(1) & R(1) & L(1) & U(1) & D(1), 'anticenter/side_anticenter', "Side Anti-center")
-    self:mark_piece(F(1) & R(1) & L(1) & U(1) & D(1), 'anticore', "Anti-core")
+    self:mark_piece(~U(1) & FA(1) & FB(1) & FC(1) & D(1), 'anticenter/top_anticenter', "Top Anti-Center")
+    self:mark_piece(U(1) & ~FA(1) & FB(1) & FC(1) & D(1), 'anticenter/side_anticenter', "Side Anti-Center")
+    self:mark_piece(U(1) & FA(1) & FB(1) & FC(1) & D(1), 'anticore', "Anti-Core")
 
-    -- Pattern piece-types around the puzzle
     self:unify_piece_types(sym)
   end,
 
@@ -262,8 +254,8 @@ puzzles:add{
     colors = { '!multi_per_facet', '!multi_facet_per' },
     completeness = { 'super', '!real', '!laminated', 'complex' },
     cuts = { '!depth', '!stored', '!wedge' },
-    turns_by = {'face', 'facet', 'edge'},
-    'experimental',
+    turns_by = {'face', 'facet'},
+    '!experimental',
     '!canonical',
     '!family',
     '!variant',
