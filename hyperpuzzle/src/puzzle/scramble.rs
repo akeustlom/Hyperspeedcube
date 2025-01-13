@@ -2,9 +2,8 @@ use std::sync::atomic::{AtomicBool, AtomicU32};
 
 use rand::Rng;
 
-use crate::Timestamp;
-
 use super::{LayeredTwist, PuzzleState};
+use crate::Timestamp;
 
 /// Parameters to deterministically generate a twist sequence to scramble a
 /// puzzle.
@@ -37,6 +36,7 @@ pub enum ScrambleType {
     Partial(u32),
 }
 
+/// Progress while scrambling.
 #[derive(Debug)]
 pub struct ScrambleProgress {
     done: AtomicU32,
@@ -55,10 +55,12 @@ impl Default for ScrambleProgress {
     }
 }
 impl ScrambleProgress {
+    /// Constructs a new `ScrambleProgress`.
     pub fn new() -> Self {
         Self::default()
     }
 
+    /// Returns the progress as a fraction: completed moves / total moves.
     pub fn fraction(&self) -> (u32, u32) {
         (
             self.done.load(std::sync::atomic::Ordering::Relaxed),
@@ -74,6 +76,7 @@ impl ScrambleProgress {
             .store(twists_done, std::sync::atomic::Ordering::Relaxed);
     }
 
+    /// Requests to cancel the scrambling.
     pub fn request_cancel(&self) {
         self.cancel_requested
             .store(true, std::sync::atomic::Ordering::Relaxed);
@@ -91,8 +94,12 @@ impl ScrambleProgress {
     // }
 }
 
+/// Output of scrambling a puzzle.
 pub struct ScrambledPuzzle {
+    /// Parameters used to generate the scramble.
     pub params: ScrambleParams,
+    /// Scramble twists applied.
     pub twists: Vec<LayeredTwist>,
+    /// State of the puzzle after scrambling.
     pub state: PuzzleState,
 }
