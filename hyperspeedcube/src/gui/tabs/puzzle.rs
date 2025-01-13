@@ -8,7 +8,8 @@ use hyperdraw::*;
 use hypermath::prelude::*;
 use hyperprefs::{AnimationPreferences, Preferences, PuzzleViewPreferencesSet, StyleColorMode};
 use hyperpuzzle::{
-    GizmoFace, LayerMask, Puzzle, PuzzleBuildStatus, PuzzleResult, ScrambleProgress,
+    GizmoFace, LayerMask, Puzzle, PuzzleBuildStatus, PuzzleBuildTask, PuzzleResult,
+    ScrambleProgress,
 };
 use hyperpuzzle_log::Solve;
 use hyperpuzzle_view::{DragState, HoverMode, PuzzleSimulation, PuzzleView, PuzzleViewInput};
@@ -276,7 +277,16 @@ impl PuzzleWidget {
                         status,
                         solve_to_load,
                     } => {
-                        loading_header = Some(L.puzzle_view.constructing_puzzle);
+                        let task = match status {
+                            Some(s) => s.task,
+                            None => Default::default(),
+                        };
+                        loading_header = Some(match task {
+                            PuzzleBuildTask::Initializing => L.puzzle_view.initializing,
+                            PuzzleBuildTask::GeneratingSpec => L.puzzle_view.generating_spec,
+                            PuzzleBuildTask::Building => L.puzzle_view.building,
+                            PuzzleBuildTask::Finalizing => L.puzzle_view.finalizing,
+                        });
                         self.load(puzzle_id, solve_to_load, prefs);
                         ui.ctx().request_repaint_after_secs(0.2); // try again soon
                     }
@@ -286,7 +296,7 @@ impl PuzzleWidget {
                             Ok(Ok(sim)) => self.set_sim(&Arc::new(Mutex::new(sim)), prefs),
                             Err(mpsc::TryRecvError::Empty) => (), // keep waiting
                             Ok(Err(e)) => self.loading = None,    // TODO: report error
-                            Err(mpsc::TryRecvError::Disconnected) => self.loading = None, // TODO: report error
+                            Err(mpsc::TryRecvError::Disconnected) => self.loading = None, /* TODO: report error */
                         }
                     }
                 }
@@ -639,8 +649,8 @@ impl PuzzleWidget {
         // for mirror in group.mirrors() {
         //     let pole = mirror.hyperplane().unwrap().pole();
         //     let basis =
-        //         pga::Blade::from_hyperplane(puzzle.ndim(), &mirror.hyperplane().unwrap()).basis();
-        //     basis[0]
+        //         pga::Blade::from_hyperplane(puzzle.ndim(),
+        // &mirror.hyperplane().unwrap()).basis();     basis[0]
         // }
 
         // (|| {

@@ -1,4 +1,4 @@
-use eyre::{bail, ensure, Result};
+use eyre::{bail, Result};
 use hypermath::pga::{self, Blade, Motor};
 use hypermath::{vector, Float, Vector, VectorRef};
 
@@ -42,6 +42,22 @@ impl LuaUserData for LuaTransform {
             } else {
                 Err(LuaError::external(format!(
                     "cannot multiply transform by {}; use `:transform()` to transform an object",
+                    lua_type_name(&rhs),
+                )))
+            }
+        });
+
+        // Exponentiation of transforms
+        methods.add_meta_method(LuaMetaMethod::Pow, |_lua, Self(this), rhs: LuaValue| {
+            if let LuaValue::Integer(rhs) = rhs {
+                Ok(Self(this.powi(rhs)))
+            } else if let LuaValue::Number(_rhs) = rhs {
+                Err(LuaError::external(
+                    "cannot raise transform to non-integer power",
+                ))
+            } else {
+                Err(LuaError::external(format!(
+                    "cannot raise transform to power of type {}",
                     lua_type_name(&rhs),
                 )))
             }
