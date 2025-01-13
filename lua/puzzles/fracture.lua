@@ -60,7 +60,7 @@ puzzles:add{
 
 	end,
 	tags = {
-    builtin = false,
+    builtin = nil,
     external = { '!gelatinbrain', '!hof', '!mc4d', museum = 3268, '!wca' },
 
     author = "Jason White",
@@ -77,7 +77,7 @@ puzzles:add{
     completeness = { 'super', '!real', '!laminated', '!complex' },
     cuts = { '!depth', 'stored', '!wedge' },
     'turns_by/vertex',
-    'experimental',
+    '!experimental',
     '!canonical',
     '!family',
     '!variant',
@@ -151,7 +151,7 @@ puzzles:add{
 
 	end,
 	tags = {
-    builtin = false,
+    builtin = nil,
     external = { '!gelatinbrain', '!hof', '!mc4d', museum = 12070, '!wca' },
 
     author = "Jason White",
@@ -168,7 +168,7 @@ puzzles:add{
     completeness = { '!super', '!real', '!laminated', '!complex' },
     cuts = { '!depth', 'stored', '!wedge' },
     'turns_by/vertex',
-    'experimental',
+    '!experimental',
     '!canonical',
     '!family',
     '!variant',

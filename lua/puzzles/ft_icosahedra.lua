@@ -59,7 +59,7 @@ puzzles:add{
   end,
 
   tags = {
-    builtin = false,
+    builtin = nil,
     external = { '!gelatinbrain', '!hof', '!mc4d', museum = 4650, '!wca' },
 
     author = "Jason White",
@@ -134,7 +134,7 @@ puzzles:add{
   end,
 
   tags = {
-    builtin = false,
+    builtin = nil,
     external = { '!gelatinbrain', '!hof', '!mc4d', '!museum', '!wca' },
 
     author = "Jason White",
@@ -197,7 +197,7 @@ puzzles:add{
   end,
 
   tags = {
-    builtin = false,
+    builtin = nil,
     external = { '!gelatinbrain', '!hof', '!mc4d', museum = 1744, '!wca' },
 
     author = "Jason White",
@@ -261,7 +261,7 @@ puzzles:add{
   end,
 
   tags = {
-    builtin = false,
+    builtin = nil,
     external = { '!gelatinbrain', '!hof', '!mc4d', museum = 4766, '!wca' },
 
     author = "Jason White",
@@ -324,7 +324,7 @@ puzzles:add{
   end,
 
   tags = {
-    builtin = false,
+    builtin = nil,
     external = { '!gelatinbrain', '!hof', '!mc4d', museum = 1746, '!wca' },
 
     author = "Jason White",
@@ -386,7 +386,7 @@ puzzles:add{
   end,
 
   tags = {
-    builtin = false,
+    builtin = nil,
     external = { '!gelatinbrain', '!hof', '!mc4d', museum = 2608, '!wca' },
 
     author = "Jason White",
@@ -450,7 +450,7 @@ puzzles:add{
   end,
 
   tags = {
-    builtin = false,
+    builtin = nil,
     external = { '!gelatinbrain', '!hof', '!mc4d', museum = 1747, '!wca' },
 
     author = "Jason White",
@@ -513,7 +513,7 @@ puzzles:add{
   end,
 
   tags = {
-    builtin = false,
+    builtin = nil,
     external = { '!gelatinbrain', '!hof', '!mc4d', museum = 1844, '!wca' },
 
     author = "Jason White",
@@ -579,7 +579,7 @@ puzzles:add{
   end,
 
   tags = {
-    builtin = false,
+    builtin = nil,
     external = { '!gelatinbrain', '!hof', '!mc4d', museum = 3632, '!wca' },
 
     author = "Jason White",
@@ -646,7 +646,7 @@ puzzles:add{
   end,
 
   tags = {
-    builtin = false,
+    builtin = nil,
     external = { '!gelatinbrain', '!hof', '!mc4d', museum = 3640, '!wca' },
 
     author = "Jason White",
@@ -712,7 +712,7 @@ puzzles:add{
   end,
 
   tags = {
-    builtin = false,
+    builtin = nil,
     external = { '!gelatinbrain', '!hof', '!mc4d', museum = 3639, '!wca' },
 
     author = "Jason White",
@@ -779,7 +779,7 @@ puzzles:add{
   end,
 
   tags = {
-    builtin = false,
+    builtin = nil,
     external = { '!gelatinbrain', '!hof', '!mc4d', museum = 3685, '!wca' },
 
     author = "Jason White",
@@ -842,7 +842,7 @@ puzzles:add{
   end,
 
   tags = {
-    builtin = false,
+    builtin = nil,
     external = { '!gelatinbrain', '!hof', '!mc4d', museum = 3732, '!wca' },
 
     author = "Jason White",
@@ -910,7 +910,7 @@ puzzles:add{
   end,
 
   tags = {
-    builtin = false,
+    builtin = nil,
     external = { '!gelatinbrain', '!hof', '!mc4d', '!museum', '!wca' },
 
     author = "Jason White",
@@ -976,7 +976,7 @@ puzzles:add{
   end,
 
   tags = {
-    builtin = false,
+    builtin = nil,
     external = { '!gelatinbrain', '!hof', '!mc4d', museum = 4538, '!wca' },
 
     author = "Jason White",
@@ -1044,7 +1044,7 @@ puzzles:add{
   end,
 
   tags = {
-    builtin = false,
+    builtin = nil,
     external = { '!gelatinbrain', '!hof', '!mc4d', museum = 3934, '!wca' },
 
     author = "Jason White",
@@ -1111,7 +1111,7 @@ puzzles:add{
   end,
 
   tags = {
-    builtin = false,
+    builtin = nil,
     external = { '!gelatinbrain', '!hof', '!mc4d', museum = 4243, '!wca' },
 
     author = "Jason White",
@@ -1179,7 +1179,7 @@ puzzles:add{
   end,
 
   tags = {
-    builtin = false,
+    builtin = nil,
     external = { '!gelatinbrain', '!hof', '!mc4d', museum = 4242, '!wca' },
 
     author = "Jason White",
@@ -1240,7 +1240,7 @@ puzzles:add{
   end,
 
   tags = {
-    builtin = false,
+    builtin = nil,
     external = { '!gelatinbrain', '!hof', '!mc4d', museum = 4490, '!wca' },
 
     author = "Jason White",

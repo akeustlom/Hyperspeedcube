@@ -37,7 +37,7 @@ function build_mixup(plus)
     end
 
     -- Define twists
-    for t, ax, rot in shape.sym.chiral:orbit(U, ccw45(U)) do
+    for t, ax, rot in shape.sym.chiral:orbit(U, ccw45(U).rev) do
       self.twists:add(ax, rot, { gizmo_pole_distance = 1 })
     end
 
@@ -84,7 +84,7 @@ function build_son_mum(plus)
     end
 
     -- Define twists
-    for t, ax, rot in shape.sym.chiral:orbit(U, ccw45(U)) do
+    for t, ax, rot in shape.sym.chiral:orbit(U, ccw45(U).rev) do
       self.twists:add(ax, rot, { gizmo_pole_distance = 1 })
     end
 
