@@ -35,18 +35,22 @@ puzzles:add{
     lib.utils.unpack_named(_ENV, self.axes)
 
     -- Mark one copy of each piece-type
-    self:mark_piece(U(1) & F(1) & UR(1) & UL(1), 'center', "Center")
-    self:mark_piece(U(1) & FR(1) & FL(2), 'center_trap', "Center Trapezoid")
-    self:mark_piece(FR(2) & FL(2) & U(1), 'center_rhomb', "Center Rhombus")
-    self:mark_piece(UR(1) & UL(1) & F(3) & US(3) & UP(3), 'pentagon', "Pentagon")
-    self:mark_piece(US(2) & UP(3) & U(1) & UL(1), 'outer_trap/oleft', "Outer Trapezoid (Left)")
-    self:mark_piece(UP(2) & US(3) & U(1) & UR(1), 'outer_trap/oright', "Outer Trapezoid (Right)")
-    self:mark_piece(US(2) & UP(2) & U(1), 'outer_rhomb', "Outer Rhombus")
-    self:mark_piece(U(1) & FR(2) & ~FL(1) & ~FL(2) & ~UR(1) & ~UR(2), 'edge_triangle/right', "Edge Triangle (Right)")
-    self:mark_piece(U(1) & FL(2) & ~FR(1) & ~FR(2) & ~UL(1) & ~UL(2), 'edge_triangle/left', "Edge Triangle (Left)")
-    self:mark_piece(UR(2) & FR(2) & U(1), 'inner_wing', "Inner Wing")
-    self:mark_piece(U(1) & FR(1) & R(3) & UR(1), 'middle_wing', "Middle Wing")
-    self:mark_piece(U(1) & FR(1) & R(2) & UR(1), 'outer_wing', "Outer Wing")
+    self:add_piece_type('centers', "Centers")
+    self:mark_piece(U(1) & F(1) & UR(1) & UL(1), 'centers/center', "Center")
+    self:mark_piece(FR(2) & FL(2) & U(1), 'centers/t', "T-Center")
+    self:add_piece_type('centers/x', "X-Centers")
+    self:mark_piece(U(1) & FR(1) & FL(2), 'centers/x/x1', "Inner X-Center")
+    self:mark_piece(UR(1) & UL(1) & F(3) & US(3) & UP(3), 'centers/x/x2', "Middle X-Center")
+    self:mark_piece(US(2) & UP(2) & U(1), 'centers/x/x3', "Outer X-Center")
+    self:add_piece_type('centers/oblique', "Obliques")
+    self:mark_piece(U(1) & FR(2) & ~FL(1) & ~FL(2) & ~UR(1) & ~UR(2), 'centers/oblique/smallr', "Small Oblique (Right)")
+    self:mark_piece(U(1) & FL(2) & ~FR(1) & ~FR(2) & ~UL(1) & ~UL(2), 'centers/oblique/smalll', "Small Oblique (Left)")
+    self:mark_piece(UP(2) & US(3) & U(1) & UR(1), 'centers/oblique/bigr', "Big Oblique (Right)")
+    self:mark_piece(US(2) & UP(3) & U(1) & UL(1), 'centers/oblique/bigl', "Big Oblique (Left)")
+    self:add_piece_type('wing', "Wings")
+    self:mark_piece(UR(2) & FR(2) & U(1), 'wing/inner', "Inner Wing")
+    self:mark_piece(U(1) & FR(1) & R(3) & UR(1), 'wing/middle', "Middle Wing")
+    self:mark_piece(U(1) & FR(1) & R(2) & UR(1), 'wing/outer', "Outer Wing")
     self:mark_piece(U(1) & F(1) & FR(1) & UR(1) & R(1), 'corner', "Corner")
 
     -- Pattern piece-types around the puzzle
@@ -108,18 +112,21 @@ puzzles:add{
     lib.utils.unpack_named(_ENV, self.axes)
 
     -- Mark one copy of each piece-type
-    self:mark_piece(U(1) & F(1) & UR(1) & UL(1), 'center', "Center")
-    self:mark_piece(U(1) & F(1) & UR(2) & UL(1) & ~L(2) & ~FL(2), 'pentagon', "Pentagon")
-    self:mark_piece(U(1) & ~UR(1) & ~F(1) & ~UP(1) & ~UP(2) & ~L(1) & ~L(2), 'kite', "Kite")
+    self:add_piece_type('centers', "Centers")
+    self:mark_piece(U(1) & F(1) & UR(1) & UL(1), 'centers/middle', "Center")
+    self:mark_piece(U(1) & ~UR(1) & ~F(1) & ~UP(1) & ~UP(2) & ~L(1) & ~L(2), 'centers/t', "T-Center")
+    self:add_piece_type('centers/x', "X-Centers")
+    self:mark_piece(U(1) & F(1) & UR(2) & UL(1) & ~L(2) & ~FL(2), 'centers/x/x1', "Inner X-Center")
+    self:mark_piece(U(1) & F(1) & UR(2) & UL(1) & ~L(3) & ~FL(3), 'centers/x/x2', "Middle X-Center")
+    self:mark_piece(U(1) & F(1) & UR(1) & ~R(1) & ~FR(1) & ~UL(1) & ~UL(2), 'centers/x/x3', "Outer X-Center")
+    self:add_piece_type('centers/oblique', "Obliques")
+    self:mark_piece(U(1) & ~L(1) & ~L(2) & ~UR(1) & ~UP(1) & UP(2), 'centers/oblique/smallr', "Small Oblique (Right)")
+    self:mark_piece(U(1) & ~R(1) & ~R(2) & ~UL(1) & ~US(1) & US(2), 'centers/oblique/smalll', "Small Oblique(Left)")
+    self:mark_piece(U(1) & UR(1) & UP(2) & US(3), 'centers/oblique/bigr', "Big Oblique (Right)")
+    self:mark_piece(U(1) & UL(1) & US(2) & UP(3), 'centers/oblique/bigl', "Big Oblique (Left)")
     self:mark_piece(UR(2) & UL(2) & FR(2) & FL(2), 'edge', "Edge")
-    self:mark_piece(U(1) & F(1) & R(1) & FR(1) & UR(1), 'corner', "Corner")
     self:mark_piece(U(1) & F(1) & R(1) & ~UR(1), 'wing', "Wing")
-    self:mark_piece(U(1) & F(1) & UR(2) & UL(1) & ~L(3) & ~FL(3), 'inner_long', "Inner Long")
-    self:mark_piece(U(1) & F(1) & UR(1) & ~R(1) & ~FR(1) & ~UL(1) & ~UL(2), 'outer_long', "Outer Long")
-    self:mark_piece(U(1) & ~R(1) & ~R(2) & ~UL(1) & ~US(1) & US(2), 'thin/left', "Thin Left")
-    self:mark_piece(U(1) & ~L(1) & ~L(2) & ~UR(1) & ~UP(1) & UP(2), 'thin/right', "Thin Right")
-    self:mark_piece(U(1) & UL(1) & US(2) & UP(3), 'thick/left', "Thick Left")
-    self:mark_piece(U(1) & UR(1) & UP(2) & US(3), 'thick/Right', "Thick Right")
+    self:mark_piece(U(1) & F(1) & R(1) & FR(1) & UR(1), 'corner', "Corner")
 
     -- Pattern piece-types around the puzzle
     self:unify_piece_types(sym.chiral)
@@ -157,7 +164,7 @@ puzzles:add{
   id = 'radio01',
   name = "Radiolarian 1",
   aliases = {"Radio 1"},
-  version = '1.0.0',
+  version = '1.0.1',
   ndim = 3,
   colors = 'icosahedron',
   build = function(self)
@@ -180,8 +187,8 @@ puzzles:add{
 
     -- TODO: Mark one copy of each piece-type
     self:mark_piece(U(1) & ~F(1) & ~UR(1) & ~UL(1), 'center', "Center")
+    self:mark_piece(U(1) & F(1) & UR(1) & ~FR(1) & ~R(1) & ~UL(1), 'x', "X-Center")
     self:mark_piece(U(1) & F(1) & ~UR(1) & ~FR(1) & ~UL(1) & ~FL(1), 'edge', "Edge")
-    self:mark_piece(U(1) & F(1) & UR(1) & ~FR(1) & ~R(1) & ~UL(1), 'petal', "Petal")
 
     -- Pattern piece-types around the puzzle
     self:unify_piece_types(sym.chiral)
@@ -220,7 +227,7 @@ puzzles:add{
   id = 'radio01_5',
   name = "Radiolarian 1.5",
   aliases = {"Radio 1.5", "Radio Canon"},
-  version = '1.0.0',
+  version = '1.0.1',
   ndim = 3,
   colors = 'icosahedron',
   build = function(self)
@@ -243,9 +250,9 @@ puzzles:add{
 
     -- TODO: Mark one copy of each piece-type
     self:mark_piece(U(1) & ~F(1) & ~UR(1) & ~UL(1), 'center', "Center")
+    self:mark_piece(U(1) & F(1) & UR(1) & ~FR(1) & ~R(1) & ~UL(1), 'x', "X-Center")
     self:mark_piece(U(1) & F(1) & ~UR(1) & ~FR(1) & ~UL(1) & ~FL(1), 'edge', "Edge")
-    self:mark_piece(U(1) & F(1) & UR(1) & ~FR(1) & ~R(1) & ~UL(1), 'kite', "Kite")
-    self:mark_piece(UR(1) & FR(1) & ~R(1), 'Wing', "Wing")
+    self:mark_piece(UR(1) & FR(1) & ~R(1), 'wing', "Wing")
     self:mark_piece(U(1) & F(1) & FR(1) & R(1) & UR(1), 'corner', "Corner")
 
     -- Pattern piece-types around the puzzle
@@ -284,7 +291,7 @@ puzzles:add{
   id = 'radio02',
   name = "Radiolarian 2",
   aliases = {"Radio 2", "Circo-Radiolarian"},
-  version = '1.0.0',
+  version = '1.0.1',
   ndim = 3,
   colors = 'icosahedron',
   build = function(self)
@@ -306,9 +313,9 @@ puzzles:add{
     lib.utils.unpack_named(_ENV, self.axes)
 
     -- TODO: Mark one copy of each piece-type
+    self:mark_piece(U(1) & F(1) & UR(1) & ~FR(1) & ~R(1) & ~UL(1), 'x', "X-Center")
     self:mark_piece(U(1) & F(1) & ~UR(1) & ~FR(1) & ~UL(1) & ~FL(1), 'edge', "Edge")
-    self:mark_piece(U(1) & F(1) & UR(1) & ~FR(1) & ~R(1) & ~UL(1), 'kite', "Kite")
-    self:mark_piece(UR(1) & FR(1) & ~R(1), 'Wing', "Wing")
+    self:mark_piece(UR(1) & FR(1) & ~R(1), 'wing', "Wing")
     self:mark_piece(U(1) & F(1) & FR(1) & R(1) & UR(1), 'corner', "Corner")
 
     -- Pattern piece-types around the puzzle
@@ -346,7 +353,7 @@ puzzles:add{
 puzzles:add{
   id = 'icosaix',
   name = "Icosaix",
-  version = '1.0.0',
+  version = '1.0.1',
   ndim = 3,
   colors = 'icosahedron',
   build = function(self)
@@ -368,8 +375,8 @@ puzzles:add{
     lib.utils.unpack_named(_ENV, self.axes)
 
     -- TODO: Mark one copy of each piece-type
+    self:mark_piece(U(1) & F(1) & UR(1) & ~FR(1) & ~R(1) & ~UL(1), 'x', "X-Center")
     self:mark_piece(U(1) & F(1) & ~UR(1) & ~FR(1) & ~UL(1) & ~FL(1), 'edge', "Edge")
-    self:mark_piece(U(1) & F(1) & UR(1) & ~FR(1) & ~R(1) & ~UL(1), 'triangle', "Triangle")
     self:mark_piece(U(1) & F(1) & FR(1) & R(1) & UR(1), 'corner', "Corner")
 
     -- Pattern piece-types around the puzzle
@@ -409,7 +416,7 @@ puzzles:add{
   id = 'radio03',
   name = "Radiolarian 3",
   aliases = {"Radio 3"},
-  version = '1.0.0',
+  version = '1.0.1',
   ndim = 3,
   colors = 'icosahedron',
   build = function(self)
@@ -432,9 +439,9 @@ puzzles:add{
 
     -- TODO: Mark one copy of each piece-type
     self:mark_piece(U(1) & F(1) & UR(1) & UL(1), 'center', "Center")
+    self:mark_piece(U(1) & F(1) & UR(1) & ~FR(1) & ~R(1) & ~UL(1), 'x', "X-Center")
     self:mark_piece(U(1) & F(1) & ~UR(1) & ~FR(1) & ~UL(1) & ~FL(1), 'edge', "Edge")
-    self:mark_piece(U(1) & F(1) & UR(1) & ~FR(1) & ~R(1) & ~UL(1), 'pentagon', "Pentagon")
-    self:mark_piece(UR(1) & FR(1) & ~R(1), 'Wing', "Wing")
+    self:mark_piece(UR(1) & FR(1) & ~R(1), 'wing', "Wing")
     self:mark_piece(U(1) & F(1) & FR(1) & R(1) & UR(1), 'corner', "Corner")
 
     -- Pattern piece-types around the puzzle
@@ -473,7 +480,7 @@ puzzles:add{
   id = 'radio04',
   name = "Radiolarian 4",
   aliases = {"Radio 4", "Eitan's Star", "DeFTI"},
-  version = '1.0.0',
+  version = '1.0.1',
   ndim = 3,
   colors = 'icosahedron',
   build = function(self)
@@ -496,7 +503,7 @@ puzzles:add{
 
     -- TODO: Mark one copy of each piece-type
     self:mark_piece(U(1) & F(1) & UR(1) & UL(1), 'center', "Center")
-    self:mark_piece(U(1) & F(1) & UR(1) & ~FR(1) & ~R(1) & ~UL(1), 'triangle', "Triangle")
+    self:mark_piece(U(1) & F(1) & UR(1) & ~FR(1) & ~R(1) & ~UL(1), 'x', "X-Center")
     self:mark_piece(UR(1) & FR(1) & ~R(1), 'Wing', "Wing")
     self:mark_piece(U(1) & F(1) & FR(1) & R(1) & UR(1), 'corner', "Corner")
 
@@ -536,7 +543,7 @@ puzzles:add{
   id = 'radio05',
   name = "Radiolarian 5",
   aliases = {"Radio 5", "Cat's Cradle"},
-  version = '1.0.0',
+  version = '1.0.1',
   ndim = 3,
   colors = 'icosahedron',
   build = function(self)
@@ -559,9 +566,10 @@ puzzles:add{
 
     -- TODO: Mark one copy of each piece-type
     self:mark_piece(U(1) & F(1) & UR(1) & UL(1) & ~R(1) & ~FR(1) & ~UP(1) & ~US(1) & ~FL(1) & ~L(1), 'center', "Center")
+    self:add_piece_type('oblique', "Oblique")
+    self:mark_piece(R(1) & UL(1) & ~US(1) & ~FR(1), 'oblique/right', "Oblique (Right)")
+    self:mark_piece(L(1) & UR(1) & ~UP(1) & ~FL(1), 'oblique/left', "Oblique (Left)")
     self:mark_piece(UR(1) & UL(1) & FR(1) & FL(1), 'edge', "Edge")
-    self:mark_piece(R(1) & UL(1) & ~US(1) & ~FR(1), 'edge_petals/right', "Edge Petal (Right)")
-    self:mark_piece(L(1) & UR(1) & ~UP(1) & ~FL(1), 'edge_petals/left', "Edge Petal (Left)")
     self:mark_piece(U(1) & ~UL(1) & ~R(1) & ~FL(1) & ~US(1), 'wing', "Wing")
     self:mark_piece(U(1) & F(1) & FR(1) & R(1) & UR(1) & ~UL(1) & ~FL(1) & ~DR(1) & ~S(1) & ~US(1), 'corner', "Corner")
 
@@ -601,7 +609,7 @@ puzzles:add{
   id = 'radio06',
   name = "Radiolarian 6",
   aliases = {"Radio 6", "Radio Web"},
-  version = '1.0.0',
+  version = '1.0.1',
   ndim = 3,
   colors = 'icosahedron',
   build = function(self)
@@ -623,12 +631,13 @@ puzzles:add{
     lib.utils.unpack_named(_ENV, self.axes)
 
     -- TODO: Mark one copy of each piece-type
-    self:mark_piece(U(1) & F(1) & UR(1) & UL(1) & ~R(1) & ~FR(1) & ~UP(1) & ~US(1) & ~FL(1) & ~L(1), 'center', "Center")
+    self:add_piece_type('centers', "Centers")
+    self:mark_piece(U(1) & F(1) & UR(1) & UL(1) & ~R(1) & ~FR(1) & ~UP(1) & ~US(1) & ~FL(1) & ~L(1), 'centers/middle', "Center")
+    self:mark_piece(UL(1) & FR(1) & R(1), 'centers/x', "X-Center")
+    self:mark_piece(R(1) & UL(1) & ~US(1) & ~FR(1), 'centers/obr', "Oblique (Right)")
+    self:mark_piece(L(1) & UR(1) & ~UP(1) & ~FL(1), 'centers/obl', "Oblique (Left)")
     self:mark_piece(UR(1) & UL(1) & FR(1) & FL(1), 'edge', "Edge")
-    self:mark_piece(R(1) & UL(1) & ~US(1) & ~FR(1), 'edge_petals/right', "Edge Petal (Right)")
-    self:mark_piece(L(1) & UR(1) & ~UP(1) & ~FL(1), 'edge_petals/left', "Edge Petal (Left)")
     self:mark_piece(U(1) & ~UL(1) & ~R(1) & ~FL(1) & ~US(1), 'wing', "Wing")
-    self:mark_piece(UL(1) & FR(1) & R(1), 'triangle', "Triangle")
     self:mark_piece(U(1) & F(1) & FR(1) & R(1) & UR(1) & ~UL(1) & ~FL(1) & ~DR(1) & ~S(1) & ~US(1), 'corner', "Corner")
 
     -- Pattern piece-types around the puzzle
@@ -667,7 +676,7 @@ puzzles:add{
   id = 'radio07',
   name = "Radiolarian 7",
   aliases = {"Radio 7", "Radio Jewel"},
-  version = '1.0.0',
+  version = '1.0.1',
   ndim = 3,
   colors = 'icosahedron',
   build = function(self)
@@ -689,11 +698,12 @@ puzzles:add{
     lib.utils.unpack_named(_ENV, self.axes)
 
     -- TODO: Mark one copy of each piece-type
-    self:mark_piece(U(1) & F(1) & UR(1) & UL(1) & ~R(1) & ~FR(1) & ~UP(1) & ~US(1) & ~FL(1) & ~L(1), 'center', "Center")
+    self:add_piece_type('centers', "Centers")
+    self:mark_piece(U(1) & F(1) & UR(1) & UL(1) & ~R(1) & ~FR(1) & ~UP(1) & ~US(1) & ~FL(1) & ~L(1), 'centers/middle', "Center")
+    self:mark_piece(UL(1) & FR(1) & R(1), 'centers/x', "X-Center")
+    self:mark_piece(R(1) & UL(1) & ~US(1) & ~FR(1), 'centers/obr', "Oblique (Right)")
+    self:mark_piece(L(1) & UR(1) & ~UP(1) & ~FL(1), 'centers/obl', "Oblique (Left)")
     self:mark_piece(UR(1) & UL(1) & FR(1) & FL(1), 'edge', "Edge")
-    self:mark_piece(R(1) & UL(1) & ~US(1) & ~FR(1), 'edge_petals/right', "Edge Petal (Right)")
-    self:mark_piece(L(1) & UR(1) & ~UP(1) & ~FL(1), 'edge_petals/left', "Edge Petal (Left)")
-    self:mark_piece(UL(1) & FR(1) & R(1), 'triangle', "Triangle")
     self:mark_piece(U(1) & F(1) & FR(1) & R(1) & UR(1) & ~UL(1) & ~FL(1) & ~DR(1) & ~S(1) & ~US(1), 'corner', "Corner")
 
     -- Pattern piece-types around the puzzle
@@ -732,7 +742,7 @@ puzzles:add{
   id = 'radio08',
   name = "Radiolarian 8",
   aliases = {"Radio 8", "Radio Jam"},
-  version = '1.0.0',
+  version = '1.0.1',
   ndim = 3,
   colors = 'icosahedron',
   build = function(self)
@@ -754,11 +764,12 @@ puzzles:add{
     lib.utils.unpack_named(_ENV, self.axes)
 
     -- TODO: Mark one copy of each piece-type
-    self:mark_piece(U(1) & F(1) & UR(1) & UL(1) & ~R(1) & ~FR(1) & ~UP(1) & ~US(1) & ~FL(1) & ~L(1), 'center', "Center")
+    self:add_piece_type('centers', "Centers")
+    self:mark_piece(U(1) & F(1) & UR(1) & UL(1) & ~R(1) & ~FR(1) & ~UP(1) & ~US(1) & ~FL(1) & ~L(1), 'centers/middle', "Center")
+    self:mark_piece(UL(1) & FR(1) & R(1) & ~FL(1) & ~US(1), 'centers/x', "X-Center")
+    self:mark_piece(R(1) & UL(1) & ~US(1) & ~FR(1), 'centers/obr', "Oblique (Right)")
+    self:mark_piece(L(1) & UR(1) & ~UP(1) & ~FL(1), 'centers/obl', "Oblique (Left)")
     self:mark_piece(UR(1) & UL(1) & FR(1) & FL(1) & ~R(1) & ~L(1), 'edge', "Edge")
-    self:mark_piece(R(1) & UL(1) & ~US(1) & ~FR(1), 'edge_petals/right', "Edge Petal (Right)")
-    self:mark_piece(L(1) & UR(1) & ~UP(1) & ~FL(1), 'edge_petals/left', "Edge Petal (Left)")
-    self:mark_piece(UL(1) & FR(1) & R(1) & ~FL(1) & ~US(1), 'pentagon', "Pentagon")
     self:mark_piece(FL(1) & R(1) & UL(1), 'wing', "Wing")
     self:mark_piece(U(1) & ~UL(1) & ~FL(1) & ~DR(1) & ~S(1) & ~US(1), 'corner', "Corner")
 
@@ -798,7 +809,7 @@ puzzles:add{
   id = 'radio09',
   name = "Radiolarian 9",
   aliases = {"Radio 9", "Radio Crystal"},
-  version = '1.0.0',
+  version = '1.0.1',
   ndim = 3,
   colors = 'icosahedron',
   build = function(self)
@@ -820,8 +831,8 @@ puzzles:add{
     lib.utils.unpack_named(_ENV, self.axes)
 
     -- TODO: Mark one copy of each piece-type
+    self:mark_piece(UL(1) & FR(1) & R(1) & ~FL(1) & ~US(1), 'x', "X-Center")
     self:mark_piece(R(1) & L(1), 'edge', "Edge")
-    self:mark_piece(UL(1) & FR(1) & R(1) & ~FL(1) & ~US(1), 'triangle', "Triangle")
     self:mark_piece(FL(1) & R(1) & UL(1) & ~L(1), 'wing', "Wing")
     self:mark_piece(U(1) & ~UL(1) & ~FL(1) & ~DR(1) & ~S(1) & ~US(1), 'corner', "Corner")
 
@@ -861,7 +872,7 @@ puzzles:add{
   id = 'radio10',
   name = "Radiolarian 10",
   aliases = {"Radio 10", "Radio Nova"},
-  version = '1.0.0',
+  version = '1.0.1',
   ndim = 3,
   colors = 'icosahedron',
   build = function(self)
@@ -883,12 +894,13 @@ puzzles:add{
     lib.utils.unpack_named(_ENV, self.axes)
 
     -- TODO: Mark one copy of each piece-type
-    self:mark_piece(FR(1) & FL(1) & US(1) & UP(1) & R(1) & L(1), 'center', "Center")
-    self:mark_piece(R(1) & L(1) & ~FR(1) & FL(1), 'center_petals/right', "Center Petal (Right)")
-    self:mark_piece(R(1) & L(1) & ~FL(1) & FR(1), 'center_petals/left', "Center Petal (Left)")
-    self:mark_piece(R(1) & L(1) & ~FR(1) & ~FL(1), 'kite', "Kite")
+    self:add_piece_type('centers', "Centers")
+    self:mark_piece(FR(1) & FL(1) & US(1) & UP(1) & R(1) & L(1), 'centers/center', "Center")
+    self:mark_piece(R(1) & L(1) & ~FR(1) & ~FL(1), 'centers/x1', "Inner X-Center")
+    self:mark_piece(UL(1) & FR(1) & R(1) & ~FL(1) & ~US(1), 'centers/x2', "Outer X-Center")
+    self:mark_piece(R(1) & L(1) & ~FR(1) & FL(1), 'centers/obr', "Oblique (Right)")
+    self:mark_piece(R(1) & L(1) & ~FL(1) & FR(1), 'centers/obl', "Oblique (Left)")
     self:mark_piece(R(1) & L(1) & ~UP(1) & ~US(1) & ~DR(1) & ~DL(1), 'edge', "Edge")
-    self:mark_piece(UL(1) & FR(1) & R(1) & ~FL(1) & ~US(1), 'triangle', "Triangle")
     self:mark_piece(FL(1) & R(1) & UL(1) & ~L(1) & ~US(1) & ~DR(1), 'wing', "Wing")
     self:mark_piece(U(1) & ~UL(1) & ~FL(1) & ~DR(1) & ~S(1) & ~US(1), 'corner', "Corner")
 
@@ -928,7 +940,7 @@ puzzles:add{
   id = 'radio11',
   name = "Radiolarian 11",
   aliases = {"Radio 11", "Radio Star"},
-  version = '1.0.0',
+  version = '1.0.1',
   ndim = 3,
   colors = 'icosahedron',
   build = function(self)
@@ -950,10 +962,11 @@ puzzles:add{
     lib.utils.unpack_named(_ENV, self.axes)
 
     -- TODO: Mark one copy of each piece-type
-    self:mark_piece(FR(1) & FL(1) & US(1) & UP(1) & R(1) & L(1), 'center', "Center")
-    self:mark_piece(R(1) & L(1) & ~FR(1) & FL(1), 'center_petals/right', "Center Petal (Right)")
-    self:mark_piece(R(1) & L(1) & ~FL(1) & FR(1), 'center_petals/left', "Center Petal (Left)")
-    self:mark_piece(R(1) & L(1) & ~FR(1) & ~FL(1), 'kite', "Kite")
+    self:add_piece_type('centers', "Centers")
+    self:mark_piece(FR(1) & FL(1) & US(1) & UP(1) & R(1) & L(1), 'centers/center', "Center")
+    self:mark_piece(R(1) & L(1) & ~FR(1) & ~FL(1), 'centers/x', "X-Center")
+    self:mark_piece(R(1) & L(1) & ~FR(1) & FL(1), 'centers/obr', "Oblique (Right)")
+    self:mark_piece(R(1) & L(1) & ~FL(1) & FR(1), 'centers/obl', "Oblique (Left)")
     self:mark_piece(R(1) & L(1) & ~UP(1) & ~US(1) & ~DR(1) & ~DL(1), 'edge', "Edge")
     self:mark_piece(FL(1) & R(1) & UL(1) & ~L(1) & ~US(1) & ~DR(1), 'wing', "Wing")
 
@@ -993,7 +1006,7 @@ puzzles:add{
   id = 'radio12',
   name = "Radiolarian 12",
   aliases = {"Radio 12", "Radio Nebula"},
-  version = '1.0.0',
+  version = '1.0.1',
   ndim = 3,
   colors = 'icosahedron',
   build = function(self)
@@ -1015,10 +1028,11 @@ puzzles:add{
     lib.utils.unpack_named(_ENV, self.axes)
 
     -- TODO: Mark one copy of each piece-type
-    self:mark_piece(FR(1) & FL(1) & US(1) & UP(1) & R(1) & L(1), 'center', "Center")
-    self:mark_piece(R(1) & L(1) & ~FR(1) & FL(1), 'center_petals/right', "Center Petal (Right)")
-    self:mark_piece(R(1) & L(1) & ~FL(1) & FR(1), 'center_petals/left', "Center Petal (Left)")
-    self:mark_piece(R(1) & L(1) & ~FR(1) & ~FL(1) & ~BR(1) & ~BL(1), 'hexagon', "Hexagon")
+    self:add_piece_type('centers', "Centers")
+    self:mark_piece(FR(1) & FL(1) & US(1) & UP(1) & R(1) & L(1), 'centers/center', "Center")
+    self:mark_piece(R(1) & L(1) & ~FR(1) & ~FL(1) & ~BR(1) & ~BL(1), 'centers/x', "X-Center")
+    self:mark_piece(R(1) & L(1) & ~FR(1) & FL(1), 'centers/obr', "Oblique (Right)")
+    self:mark_piece(R(1) & L(1) & ~FL(1) & FR(1), 'centers/obl', "Oblique (Left)")
     self:mark_piece(R(1) & L(1) & ~UP(1) & ~US(1) & ~DR(1) & ~DL(1), 'edge', "Edge")
     self:mark_piece(FL(1) & R(1) & UL(1) & ~L(1) & ~US(1) & ~DR(1), 'inner_wing', "Inner Wing")
     self:mark_piece(R(1) & L(1) & ~F(1), 'outer_wing', "Outer Wing")
@@ -1060,7 +1074,7 @@ puzzles:add{
   id = 'radio13',
   name = "Radiolarian 13",
   aliases = {"Radio 13", "Radio Gem"},
-  version = '1.0.0',
+  version = '1.0.1',
   ndim = 3,
   colors = 'icosahedron',
   build = function(self)
@@ -1082,10 +1096,11 @@ puzzles:add{
     lib.utils.unpack_named(_ENV, self.axes)
 
     -- TODO: Mark one copy of each piece-type
-    self:mark_piece(FR(1) & FL(1) & US(1) & UP(1) & R(1) & L(1), 'center', "Center")
-    self:mark_piece(R(1) & L(1) & ~FR(1) & FL(1), 'center_petals/right', "Center Petal (Right)")
-    self:mark_piece(R(1) & L(1) & ~FL(1) & FR(1), 'center_petals/left', "Center Petal (Left)")
-    self:mark_piece(R(1) & L(1) & ~FR(1) & ~FL(1) & ~BR(1) & ~BL(1), 'rhombus', "Rhombus")
+    self:add_piece_type('centers', "Centers")
+    self:mark_piece(FR(1) & FL(1) & US(1) & UP(1) & R(1) & L(1), 'centers/center', "Center")
+    self:mark_piece(R(1) & L(1) & ~FR(1) & ~FL(1) & ~BR(1) & ~BL(1), 'centers/x', "X-Center")
+    self:mark_piece(R(1) & L(1) & ~FR(1) & FL(1), 'centers/obr', "Oblique (Right)")
+    self:mark_piece(R(1) & L(1) & ~FL(1) & FR(1), 'centers/obl', "Oblique (Left)")
     self:mark_piece(R(1) & L(1) & ~UP(1) & ~US(1) & ~DR(1) & ~DL(1), 'edge', "Edge")
     self:mark_piece(R(1) & L(1) & ~F(1), 'wing', "Wing")
     self:mark_piece(F(1) & R(1) & L(1) & BR(1) & BL(1), 'corner', "Corner")
@@ -1126,7 +1141,7 @@ puzzles:add{
   id = 'radio14',
   name = "Radiolarian 14",
   aliases = {"Radio 14", "Radio Fathom"},
-  version = '1.0.0',
+  version = '1.0.1',
   ndim = 3,
   colors = 'icosahedron',
   build = function(self)
@@ -1148,10 +1163,11 @@ puzzles:add{
     lib.utils.unpack_named(_ENV, self.axes)
 
     -- TODO: Mark one copy of each piece-type
-    self:mark_piece(FR(1) & FL(1) & US(1) & UP(1) & R(1) & L(1), 'center', "Center")
-    self:mark_piece(R(1) & L(1) & ~FR(1) & FL(1) & ~BL(1), 'center_petals/right', "Center Petal (Right)")
-    self:mark_piece(R(1) & L(1) & ~FL(1) & FR(1) & ~BR(1), 'center_petals/left', "Center Petal (Left)")
-    self:mark_piece(R(1) & L(1) & ~FR(1) & ~FL(1) & ~BR(1) & ~BL(1), 'rhombus', "Rhombus")
+    self:add_piece_type('centers', "Centers")
+    self:mark_piece(FR(1) & FL(1) & US(1) & UP(1) & R(1) & L(1), 'centers/center', "Center")
+    self:mark_piece(R(1) & L(1) & ~FR(1) & ~FL(1) & ~BR(1) & ~BL(1), 'centers/x', "Rhombus")
+    self:mark_piece(R(1) & L(1) & ~FR(1) & FL(1) & ~BL(1), 'centers/obr', "Oblique (Right)")
+    self:mark_piece(R(1) & L(1) & ~FL(1) & FR(1) & ~BR(1), 'centers/obl', "Oblique (Left)")
     self:mark_piece(R(1) & L(1) & ~UP(1) & ~US(1) & ~DR(1) & ~DL(1), 'edge', "Edge")
     self:mark_piece(R(1) & L(1) & ~F(1) & B(1), 'inner_wing', "Inner Wing")
     self:mark_piece(R(1) & L(1) & ~F(1) & ~B(1), 'outer_wing', "Outer Wing")
