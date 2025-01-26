@@ -3,10 +3,14 @@ local linear = lib.symmetries.linear
 local polygonal = lib.symmetries.polygonal
 local prisms = lib.puzzles.prisms -- Helpers to integrate triangular prism; should i pull from puzzles?
 
+function piecewarning()
+    print("warning(s) intentional, some pieces are disjoint")
+end
+
 puzzles:add{
   id = 'complex_3x3x3',
   name = "Complex 3x3x3",
-  version = '1.0.1',
+  version = '1.0.2',
   ndim = 3,
   colors = 'cube',
   remove_internals = false,
@@ -47,6 +51,7 @@ puzzles:add{
     self:mark_piece(R(1) & L(1) & U(1) & D(1) & ~F(1) & ~B(1), 'antiaxle', "Anti-Axle")
     self:mark_piece(R(1) & L(1) & U(1) & ~D(1) & F(1) & B(1), 'anticenter', "Anti-Center")
     self:mark_piece(R(1) & L(1) & U(1) & D(1) & F(1) & B(1), 'anticore', "Anti-Core")
+    piecewarning()
 
     -- Pattern piece-types around the puzzle
     self:unify_piece_types(sym)
@@ -71,7 +76,7 @@ puzzles:add{
     completeness = { 'super', '!real', '!laminated', 'complex' },
     cuts = { '!depth', '!stored', '!wedge' },
     turns_by = {'face', 'facet'},
-    '!experimental',
+    'experimental',
     '!canonical',
     '!family',
     '!variant',
@@ -83,7 +88,8 @@ puzzles:add{
 puzzles:add{
   id = 'complex_tetrahedron',
   name = "Complex Tetrahedron",
-  version = '1.0.1',
+  aliases = {"Laminated Tetrahedron"},
+  version = '1.0.2',
   ndim = 3,
   colors = 'tetrahedron',
   remove_internals = false,
@@ -132,6 +138,7 @@ puzzles:add{
     self:mark_piece(R(1) & L(1) & ~U(1) & ~F(1), 'edge', "Edge")
     self:mark_piece(R(1) & L(1) & U(1) & ~F(1), 'corner', "Corner")
     self:mark_piece(R(1) & L(1) & U(1) & F(1), 'anticore', "Anticore")
+    piecewarning()
 
     -- Pattern piece-types around the puzzle
     self:unify_piece_types(sym)
@@ -153,10 +160,10 @@ puzzles:add{
     },
     axes = { '3d/elementary/tetrahedral', '!hybrid', '!multicore' },
     colors = { '!multi_per_facet', '!multi_facet_per' },
-    completeness = { 'super', '!real', '!laminated', 'complex' },
+    completeness = { 'super', '!real', 'laminated', 'complex' },
     cuts = { '!depth', '!stored', '!wedge' },
     turns_by = {'face', 'facet', 'vertex'},
-    '!experimental',
+    'experimental',
     '!canonical',
     '!family',
     '!variant',
@@ -233,6 +240,7 @@ puzzles:add{
     self:mark_piece(~U(1) & FA(1) & FB(1) & FC(1) & D(1), 'anticenter/top_anticenter', "Top Anti-Center")
     self:mark_piece(U(1) & ~FA(1) & FB(1) & FC(1) & D(1), 'anticenter/side_anticenter', "Side Anti-Center")
     self:mark_piece(U(1) & FA(1) & FB(1) & FC(1) & D(1), 'anticore', "Anti-Core")
+    piecewarning()
 
     self:unify_piece_types(sym)
   end,
