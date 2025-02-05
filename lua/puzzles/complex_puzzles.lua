@@ -172,11 +172,44 @@ puzzles:add{
   },
 }
 
+-- Double-sided prism color system
+color_system_generators:add{
+  id = 'superprism',
+  name = "Super-Stickered Polygonal Prism",
+  params = {
+    prisms.PARAMS.polygon_size("Polygon size"),
+  },
+  gen = function(params)
+    local n = params[1]
+    local colors = {
+      { name = 'U', display = "Up",   default = "Mono Dyad [1]" },
+      { name = 'D', display = "Down", default = "Mono Dyad [2]" },
+    }
+    for i = 1, n do
+      local a = lib.utils.nth_uppercase_name(i)
+      table.insert(colors, {
+        name = 'F' .. a,
+        display = "Face " .. a,
+        default = string.format("Rainbow [%d/%d]", i, n),
+      })
+      table.insert(colors, {
+        name = 'I' .. a,
+        display = "Inner " .. a,
+        default = string.format("Dark Rainbow [%d/%d]", i, n),
+      })
+    end
+    return {
+      name = prisms.prism_name(n),
+      colors = colors,
+    }
+  end,
+}
+
 puzzles:add{
   id = 'complex_triprism',
   name = "Complex Triangular Prism",
-  version = '1.0.1',
-  colors = 'prism:6',
+  version = '1.0.2',
+  colors = 'superprism:3',
   ndim = 3,
   remove_internals = false,
   build = function(self)
@@ -208,12 +241,12 @@ puzzles:add{
     
     -- internal stickers; let the record show that snek tried to compress the loops
     for j=1,2,1 do
-        self:slice(plane(FA.vector, side_cut_depths[j]), {stickers = self.colors.FA}) -- doesn't seem to be another way to access the color (probably skill issue)
+        self:slice(plane(FA.vector, side_cut_depths[j]), {stickers = self.colors.FA})
         self:slice(plane(FB.vector, side_cut_depths[j]), {stickers = self.colors.FB})
         self:slice(plane(FC.vector, side_cut_depths[j]), {stickers = self.colors.FC})
-        self:slice(plane(-FA.vector, -side_cut_depths[j]), {stickers = self.colors.FD})
-        self:slice(plane(-FB.vector, -side_cut_depths[j]), {stickers = self.colors.FE})
-        self:slice(plane(-FC.vector, -side_cut_depths[j]), {stickers = self.colors.FF})
+        self:slice(plane(-FA.vector, -side_cut_depths[j]), {stickers = self.colors.IA})
+        self:slice(plane(-FB.vector, -side_cut_depths[j]), {stickers = self.colors.IB})
+        self:slice(plane(-FC.vector, -side_cut_depths[j]), {stickers = self.colors.IC})
     end
     for k=3,-3,-2 do
         self:slice(plane(U.vector, height*k/5), {stickers = self.colors.U})
