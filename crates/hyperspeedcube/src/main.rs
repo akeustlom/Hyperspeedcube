@@ -18,6 +18,7 @@ mod locales;
 mod util;
 
 pub use gui::about_text;
+use winit::platform::modifier_supplement::KeyEventExtModifierSupplement;
 
 /// Strings for the current locale.
 ///
@@ -109,7 +110,6 @@ fn main() -> eframe::Result<()> {
     wasm_bindgen_futures::spawn_local(run());
 }
 
-#[allow(clippy::arc_with_non_send_sync)]
 async fn run() -> eframe::Result<()> {
     let icon_data = eframe::icon_data::from_png_bytes(ICON_32_PNG_DATA)
         .expect("error loading application icon");
@@ -189,20 +189,12 @@ fn init_deadlock_detection() {
 }
 
 fn make_wgpu_configuration() -> eframe::egui_wgpu::WgpuConfiguration {
-    let mut wgpu_options = eframe::egui_wgpu::WgpuConfiguration::default();
-    let eframe::egui_wgpu::WgpuSetup::CreateNew {
-        supported_backends: _,
-        power_preference: _,
-        device_descriptor,
-    } = &mut wgpu_options.wgpu_setup
-    else {
-        return wgpu_options;
-    };
+    let mut wgpu_setup = eframe::egui_wgpu::WgpuSetupCreateNew::default();
 
-    let old_device_descriptor_fn = std::sync::Arc::clone(device_descriptor);
+    let old_device_descriptor_fn = std::sync::Arc::clone(&wgpu_setup.device_descriptor);
 
     // Request WGPU features.
-    *device_descriptor = std::sync::Arc::new(move |adapter| {
+    wgpu_setup.device_descriptor = std::sync::Arc::new(move |adapter| {
         let mut device_descriptor = old_device_descriptor_fn(adapter);
         device_descriptor.required_features |= wgpu::Features::CLEAR_TEXTURE;
 
@@ -228,5 +220,8 @@ fn make_wgpu_configuration() -> eframe::egui_wgpu::WgpuConfiguration {
         device_descriptor
     });
 
-    wgpu_options
+    eframe::egui_wgpu::WgpuConfiguration{
+        wgpu_setup:eframe::egui_wgpu::WgpuSetup::CreateNew(wgpu_setup),
+        ..Default::default()
+    }
 }

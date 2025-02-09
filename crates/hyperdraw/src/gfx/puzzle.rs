@@ -36,8 +36,8 @@ const Z_CLIP: f32 = 8.0;
 /// Z buffer precision.
 const Z_EPSILON: f32 = 0.01;
 
-#[allow(unused)]
 /// Color ID for the background.
+#[allow(unused)]
 const BACKGROUND_COLOR_ID: u32 = 0;
 /// Color ID for the internals.
 const INTERNALS_COLOR_ID: u32 = 1;
@@ -289,15 +289,15 @@ impl PuzzleRenderer {
         let output_buffer = self.gfx.device.create_buffer(&output_buffer_desc);
 
         encoder.copy_texture_to_buffer(
-            wgpu::ImageCopyTexture {
+            wgpu::TexelCopyTextureInfo {
                 aspect: wgpu::TextureAspect::All,
                 texture: &output_texture,
                 mip_level: 0,
                 origin: wgpu::Origin3d::ZERO,
             },
-            wgpu::ImageCopyBuffer {
+            wgpu::TexelCopyBufferInfo {
                 buffer: &output_buffer,
-                layout: wgpu::ImageDataLayout {
+                layout: wgpu::TexelCopyBufferLayout {
                     offset: 0,
                     bytes_per_row: Some(4 * width),
                     rows_per_image: Some(height),

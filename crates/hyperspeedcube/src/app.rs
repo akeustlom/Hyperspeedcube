@@ -24,6 +24,8 @@ pub struct App {
     pub(crate) animation_prefs: ModifiedPreset<AnimationPreferences>,
 
     egui_wgpu_renderer: Arc<RwLock<eframe::egui_wgpu::Renderer>>,
+
+    pub(crate) key_events: Vec<winit::event::KeyEvent>,
 }
 
 impl App {
@@ -38,8 +40,8 @@ impl App {
         let wgpu_render_state = cc.wgpu_render_state.as_ref().expect("no wgpu render state");
         Self {
             gfx: Arc::new(GraphicsState::new(
-                Arc::clone(&wgpu_render_state.device),
-                Arc::clone(&wgpu_render_state.queue),
+                &wgpu_render_state.device,
+                &wgpu_render_state.queue,
             )),
 
             prefs,
@@ -50,6 +52,8 @@ impl App {
             animation_prefs,
 
             egui_wgpu_renderer: Arc::clone(&wgpu_render_state.renderer),
+
+            key_events: vec![],
         }
     }
 

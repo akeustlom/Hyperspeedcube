@@ -346,7 +346,7 @@ fn show_filter_presets_list_ui_contents(
                     .text_edit_hint(l.new_name_hint)
                     .confirm_button_validator(&validate_sequence_rename)
                     .delete_button_validator(&|_| Ok(Some(l.actions.delete.into())))
-                    .at(ui, &r, egui::vec2(-18.0, 0.85))
+                    .at(ui, &r, egui::vec2(-17.0, 2.0))
                     .show(ui)
             });
             if let Some(r) = popup_response {
@@ -566,7 +566,7 @@ fn show_preset_name(
             .text_edit_hint(l.new_name_hint)
             .confirm_button_validator(&validate_preset_rename)
             .delete_button_validator(&|_| Ok(Some(l.actions.delete.into())))
-            .at(ui, &r, egui::vec2(-4.0, 1.0))
+            .at(ui, &r, egui::vec2(-3.0, 2.0))
             .show(ui)
     });
     if let Some(r) = popup_response {
@@ -899,7 +899,7 @@ fn show_filter_checkboxes_ui(
                     width: 1.0,
                     color: ui.visuals().window_stroke.color,
                 },
-                inner_margin: egui::Margin::same(3.5),
+                inner_margin: egui::Margin::same(3),
                 ..Default::default()
             }
             .show(ui, |ui| {
