@@ -1,7 +1,7 @@
 use std::str::FromStr;
 
-use hypermath::pga::Motor;
 use hypermath::Vector;
+use hypermath::pga::Motor;
 use hyperpuzzle_core::{Axis, LayerMask, LayerMaskUint};
 use parking_lot::{MappedMutexGuard, MutexGuard};
 
@@ -15,8 +15,8 @@ impl LuaUserData for LuaAxis {
     fn add_fields<F: LuaUserDataFields<Self>>(fields: &mut F) {
         fields.add_meta_field("type", LuaStaticStr("axis"));
 
+        LuaIdDatabase::add_db_entry_fields(fields);
         LuaNamedIdDatabase::add_named_db_entry_fields(fields);
-        LuaOrderedIdDatabase::add_ordered_db_entry_fields(fields);
 
         fields.add_field_method_get("vector", |_lua, this| {
             let puz = this.db.lock();

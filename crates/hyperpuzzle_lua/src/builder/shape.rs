@@ -1,9 +1,9 @@
 use std::borrow::Cow;
-use std::collections::{hash_map, HashMap};
+use std::collections::{HashMap, hash_map};
 use std::ops::Range;
 use std::sync::Arc;
 
-use eyre::{bail, ensure, eyre, Context, OptionExt, Result};
+use eyre::{Context, OptionExt, Result, bail, ensure, eyre};
 use hypermath::prelude::*;
 use hyperpuzzle_core::*;
 use hypershape::prelude::*;
@@ -424,11 +424,7 @@ impl ShapeBuilder {
     }
 
     /// Constructs a mesh and assembles piece & sticker data for the shape.
-    pub fn build(
-        &self,
-        color_id_map: &HashMap<Color, Color>,
-        warn_fn: impl Copy + Fn(eyre::Error),
-    ) -> Result<ShapeBuildOutput> {
+    pub fn build(&self, warn_fn: impl Copy + Fn(eyre::Error)) -> Result<ShapeBuildOutput> {
         let space = &self.space;
         let ndim = space.ndim();
 
@@ -538,7 +534,7 @@ impl ShapeBuilder {
                     let sticker_id = stickers.push(StickerInfo {
                         piece: piece_id,
                         plane: sticker.plane.clone(),
-                        color: *color_id_map.get(&sticker.color).unwrap_or(&Color::INTERNAL),
+                        color: sticker.color,
                     })?;
                     pieces[piece_id].stickers.push(sticker_id);
                 }

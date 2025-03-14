@@ -1,6 +1,7 @@
 use hypermath::prelude::*;
 use hyperpuzzle_core::{PerPiece, PieceMask};
 
+use super::structs::GfxEffectParams;
 use crate::{Camera, PieceStyleValues};
 
 /// Complete set of values that determines 3D puzzle vertex positions.
@@ -68,6 +69,9 @@ pub struct DrawParams {
     pub piece_styles: Vec<(PieceStyleValues, PieceMask)>,
     /// N-dimensional transform for each piece.
     pub piece_transforms: PerPiece<Matrix>,
+
+    /// Post-processing effects.
+    pub effects: GfxEffectParams,
 }
 impl DrawParams {
     /// Returns a vector indicating the direction that light is shining from.

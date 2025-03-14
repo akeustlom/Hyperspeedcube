@@ -12,11 +12,12 @@ pub type TextEditValidator<'a, 's> = &'a dyn Fn(&str) -> TextValidationResult<'s
 pub type TextValidationResult<'s> = Result<Option<Cow<'s, str>>, Option<Cow<'s, str>>>;
 
 #[derive(Debug, Default, Clone)]
-pub enum TextEditPopupResponse {
+pub enum TextEditPopupResponse<R = std::convert::Infallible> {
     Confirm(String),
     Delete,
     #[default]
     Cancel,
+    Other(R),
 }
 
 /// Popup with a single-line text edit widget as well as several other optional
@@ -72,11 +73,7 @@ impl<'v, 's> TextEditPopup<'v, 's> {
     /// Executes a function if the popup is open. This is useful to avoid
     /// unnecessary computation.
     pub fn if_open<R>(self, f: impl FnOnce(Self) -> Option<R>) -> Option<R> {
-        if self.is_open() {
-            f(self)
-        } else {
-            None
-        }
+        if self.is_open() { f(self) } else { None }
     }
 
     pub fn below(mut self, r: &egui::Response) -> Self {
@@ -173,7 +170,7 @@ impl<'v, 's> TextEditPopup<'v, 's> {
 
     /// Shows the text edit popup if it is open.
     pub fn show(self, ui: &mut egui::Ui) -> Option<TextEditPopupResponse> {
-        self.show_with(ui, |_| ()).0
+        self.show_with(ui, |_| None)
     }
 
     /// Shows the text edit popup if it is open, and calls `inner` to display
@@ -181,10 +178,9 @@ impl<'v, 's> TextEditPopup<'v, 's> {
     pub fn show_with<R>(
         self,
         ui: &mut egui::Ui,
-        inner: impl FnOnce(&mut egui::Ui) -> R,
-    ) -> (Option<TextEditPopupResponse>, Option<R>) {
+        inner: impl FnOnce(&mut egui::Ui) -> Option<TextEditPopupResponse<R>>,
+    ) -> Option<TextEditPopupResponse<R>> {
         let mut response = None;
-        let mut inner_response = None;
 
         if self.is_open() {
             let area_response = self.area.show(ui.ctx(), |ui| {
@@ -234,7 +230,14 @@ impl<'v, 's> TextEditPopup<'v, 's> {
                             }
                         }
                     });
-                    inner_response = Some(inner(ui));
+
+                    let inner_response = inner(ui);
+                    if inner_response.is_some() {
+                        ui.memory_mut(|mem| mem.close_popup());
+                    }
+                    if response.is_none() {
+                        response = inner_response;
+                    }
                 });
             });
 
@@ -248,7 +251,7 @@ impl<'v, 's> TextEditPopup<'v, 's> {
             }
         }
 
-        (response, inner_response)
+        response
     }
 }
 
